@@ -1,0 +1,7 @@
+from enum import Enum
+from pydantic import BaseModel, Field
+from typing import Optional
+
+class UserInterested(BaseModel):
+    inicial_conversation_is_over: Optional[bool] = Field(None, title="Inicial Conversation is Over", description='This field indicates whether the initial conversation with the user has concluded because they are interested in another property. For example, if the user expresses a preference for a property with specific features that differ from the proposed property, such as "Não gostei, gostaria de um imovel com 3 banheiros," this field would have a True value. Must only be true when user is interested in another property or afther agent finished speaking about the property he is offering.', enum=[True, False])
+    is_interested_in_another_property: Optional[bool] = Field(None, title="Is Interested in Another Property", description='This field signifies whether the user is interested in a property other than the one initially proposed. For instance, if the user expresses interest in a property with different characteristics than the proposed one, as in "Não gostei, gostaria de um imovel com 3 banheiros," this field would also have a True value. Must be true when user is requesting information or expressing interest in a property with different characteristics than the one initially proposed. An example of this a the phrase "nao gostei, gostaria de no minimo 4 quartos"', enum=[True, False])
