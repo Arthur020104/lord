@@ -5,8 +5,10 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_experimental.tools import PythonAstREPLTool
 from langchain.tools import Tool
 from unidecode import unidecode
+from secret.apiOpenAI import api_key
+import sys
+sys.path.append('../')
 
-api_key = "SECRET"
 llm = ChatOpenAI(api_key=api_key, temperature=0, model="gpt-3.5-turbo")
 
 def clear_string(input_string):

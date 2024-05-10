@@ -1,7 +1,9 @@
 from langchain_openai import ChatOpenAI
-from langchain.chains.llm import LLMChain
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain.schema.output_parser import StrOutputParser
+from secret.apiOpenAI import api_key
+import sys
+sys.path.append('../')
 
 def ask_for_info(ask_for, chat_history=[]):
     template = """Language: pt-BR, Don't greet the user at any point, only ask for the information needed.
@@ -25,7 +27,6 @@ def ask_for_info(ask_for, chat_history=[]):
     system_message_prompt = SystemMessagePromptTemplate.from_template(template)
     chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt])
 
-    api_key = "SECRET"
     llm = ChatOpenAI(api_key=api_key, temperature=0, model="gpt-3.5-turbo")
     chain1 = chat_prompt | llm | StrOutputParser()
 

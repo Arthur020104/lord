@@ -7,11 +7,11 @@ from memory.UserInterested import UserInterested
 from memory.CustomBuffer import CustomConversationTokenBufferMemory
 from agents.askForInfo import ask_for_info
 import sys
-from tools.dataManager import executar
-
+from tools.dataManager import execute
+from secret.apiOpenAI import api_key
 sys.path.append('../')
 
-api_key = "SECRET"
+
 llm = ChatOpenAI(api_key=api_key, temperature=0.5, model="gpt-3.5-turbo")
 
 def check_what_is_missing(input):
@@ -116,7 +116,7 @@ def generate_question():
 
     if user_interested_in_another_property:
         if not ask_for or get_user_info().user_wants_to_search_for_property:
-            return {'text': executar(get_user_info())}
+            return {'text': execute(get_user_info())}
         last_question = ask_for_info(ask_for, memory.get_memory())
         return last_question
     conversation_memory = memory.get_memory()
