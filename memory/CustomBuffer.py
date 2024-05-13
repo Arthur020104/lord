@@ -30,5 +30,15 @@ class CustomConversationTokenBufferMemory:
             self._chat_memory.pop(0)
     def get_memory(self):
         return self._chat_memory
+    def get_memory_tuple(self):
+        full_memory = []
+        for conversation in self._chat_memory:
+           # conver = []
+            tuple_ia = (self._ia_key, conversation[self._ia_key])
+            tuple_human = (self._human_key, conversation[self._human_key])
+            full_memory.append(tuple_ia)
+            full_memory.append(tuple_human)
+            #full_memory.append(conver)
+        return full_memory
             
     
