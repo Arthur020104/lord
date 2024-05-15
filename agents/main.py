@@ -7,7 +7,7 @@ from memory.CustomBuffer import CustomConversationTokenBufferMemory
 from agents.node import Node
 from agents.askforinfoNode import AskForInfoNode
 from agents.dataNode import DataNode
-from agents.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit
+from agents.prompts.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit
 from secret.apiOpenAI import api_key
 
 # Initialize the LLM
