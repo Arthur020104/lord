@@ -1,11 +1,11 @@
 import streamlit as st
-from agents.lord import generate_question,get_user_input, get_user_info
+from agents.main import call_current_node, process_user_input
 st.title("LORD")
 
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
-    response = f"LordGpt: {generate_question()['text']}"
+    response = f"LordGpt: {call_current_node()['text']}"
     #with st.chat_message("assistant"):
     #    st.markdown(response)
     
@@ -21,8 +21,8 @@ if prompt := st.chat_input("What is up?"):
     st.chat_message("user").markdown(prompt)
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
-    response_text = get_user_input(prompt)
-    response = f"LordGpt: {generate_question()['text']}"
+    response_text = process_user_input(prompt)
+    response = f"LordGpt: {call_current_node()['text']}"
     
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
