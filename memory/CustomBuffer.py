@@ -40,5 +40,7 @@ class CustomConversationTokenBufferMemory:
             full_memory.append(tuple_human)
             #full_memory.append(conver)
         return full_memory
+    def delete_memory(self):
+        self._chat_memory = []
             
     

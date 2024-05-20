@@ -1,60 +1,106 @@
 import pandas as pd
-from langchain_openai import ChatOpenAI
-from langchain.agents import create_openai_functions_agent, AgentExecutor
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_experimental.tools import PythonAstREPLTool
-from langchain.tools import Tool
-from unidecode import unidecode
-from secret.apiOpenAI import api_key
 import sys
 sys.path.append('../')
+from langchain_openai import ChatOpenAI
+from langchain.chains.llm import LLMChain
+from langchain.prompts import PromptTemplate
+from unidecode import unidecode
+from secret.apiOpenAI import api_key
 
-llm = ChatOpenAI(api_key=api_key, temperature=0, model="gpt-3.5-turbo")
+# Initialize OpenAI LLM
+llm = ChatOpenAI(api_key=api_key, temperature=0, model="gpt-4o")
 
 def clear_string(input_string):
-    cleaned_string = unidecode(input_string)
-    return cleaned_string.lower()
+    """
+    A function that removes diacritics and converts to lowercase.
+    """
+    return unidecode(input_string).lower()
 
-df = pd.read_csv("C:/Users/arthu/OneDrive/Desktop/Repo/llm/ls.csv")
+# Load DataFrame
+df = pd.read_csv("C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/ls.csv")
 
-shortest_row_length = min(len(str(row)) for row in df.itertuples(index=False))
-print(shortest_row_length)
+# Prepare the prompt template for the LLM
+prompt_template = """
+You are a data search assistant. Your task is to generate Python code to query a DataFrame based on a user query.
+Use this df = pd.read_csv("C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/ls.csv") to load the DataFrame.
+You already have a function the clear_string function that removes diacritics and converts a string to lowercase.
+Dont import anything else only pandas.
+Use only clear_string to remove diacritics and convert to lowercase. Only apply clear_string to the user query dont over complicate the code.
+Only query up to 3 items from the DataFrame never more than that.
+UnitType can be only 'HOUSE', 'APARTMENT'
+Never translate query names, always use the same name as the DataFrame columns.
+Here is an example of the DataFrame (df):
+{df_head}
 
-data_frame_reader = PythonAstREPLTool(
-    locals={"df": df, "clear_string": clear_string},
-    name="DataFrame_Reader",
-    description=f"A tool to read columns from a DataFrame using Python code. 'df' is already loaded in the locals, you need to execute Python code to read from the DataFrame. 'df' has the following columns: {df.columns}. Always remove diacritics in comparisons both from the base and the search (before searching, remove diacritics from the database), standardize the search without using case.",
-)
+The DataFrame columns are: {columns}
 
-tools = [data_frame_reader]
+Always remove diacritics in comparisons both from the base and the search (before searching, remove diacritics from the database), and standardize the search without using case.
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            f"You are a data search assistant. You will receive questions/codes and return answers based on your 'data reading' function that uses Python code. Focus on answering questions with just the data, if necessary add information, do not show more than 2 properties unless requested. Always show the property index as id, along with all the property columns, id and location fields should come first. And if a field named id is received, search the base as index using iloc, loc. Start with a specific search and if nothing is found, expand the search. For example, if the search is for shopping park and landscape street and nothing is found, perform the search for shopping park. Do not use information like near x as a search query. df.head(2) = {df.head(2)} perform the search df[df['Neighborhood'].apply(clear_string).str.contains(clear_string('shopping park'))] to find properties in the shopping park neighborhood. Return only valid information (all the 'in' values), such as property values, never return just the search keys. example of a complete search df[(df['City'].apply(clear_string) == clear_string('uberlândia')) & (df['UnitType'].apply(clear_string) == clear_string('house')) & (df['Bedrooms'] == 4) & (df['Bathrooms'] == 5) & (df['Suites'] == 4) & (df['Neighborhood'].apply(clear_string).str.contains(clear_string('shopping park'))) & (df['ParkingSpaces'] == 4) & (df['Price'] >= 2025000) & (df['Price'] <= 2475000)][:5] Never alter the information retrieved from the database. Do not summarize or hide information.",
-        ),
-        ("user", "{input}"),
-        MessagesPlaceholder(variable_name="agent_scratchpad"),
-    ]
-)
+When given a user query, generate Python code that processes the DataFrame to retrieve the relevant data. The result should be stored in a variable named `result`.
 
-agent = create_openai_functions_agent(llm=llm, tools=tools, prompt=prompt)
-executor_agent = AgentExecutor(agent=agent, tools=tools, verbose=True)
+User Query: {user_query}
 
-agent_chain = AgentExecutor.from_agent_and_tools(
-    agent=agent, tools=tools, verbose=True
-)
+the response must only be the python code, never return antyhing else.
+Dont use  ```python or ``` at the start or finish of the code
+Identation must be 4 spaces
 
-def execute(input:str):
-    response = agent_chain.invoke({"input":input})
-    return response['output']
+Code Example:
+"
+df = pd.read_csv("C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/ls.csv")
 
-read = Tool.from_function(
-    func= execute,
-     name="DataFrame_Reader",
-    description=f"An assistant for database search, pass the questions to it and it will return the answer. Just tell it what you are looking for and it will respond. Must be specific.",
-)
+df['UnitType'] = df['UnitType'].apply(clear_string)
+df_filtered = df[
+    (df['UnitType'] == clear_string(user_query['UnitType'])) &
+    (df['Bedrooms'] >= user_query['Bedrooms_min']) &
+    (df['Bedrooms'] <= user_query['Bedrooms_max']) &
+    (df['Bathrooms'] >= user_query['Bathrooms_min']) &
+    (df['Bathrooms'] <= user_query['Bathrooms_max']) &
+    (df['Suites'] >= user_query['Suites_min']) &
+    (df['Suites'] <= user_query['Suites_max']) &
+    (df['ParkingSpaces'] >= user_query['ParkingSpaces_min']) &
+    (df['ParkingSpaces'] <= user_query['ParkingSpaces_max']) &
+    (df['Price'] <= user_query['Price_max'])
+]
+result = df_filtered.head(3)
+"
+"""
+
+# Create a LangChain prompt template
+lc_prompt = PromptTemplate.from_template(prompt_template)
+
+def generate_and_execute_query(user_query: str):
+    """
+    Generates and executes a DataFrame query based on user input.
+    """
+    df = pd.read_csv("C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/ls.csv")
+    dict_input = {'df_head':df.head(2).to_string(),'columns':", ".join(df.columns),'user_query':user_query}
+    # Create a LangChain LLMChain
+    chain = LLMChain(prompt=lc_prompt, llm=llm)
+
+    # Get the code generation from the LLM
+    response = chain.invoke(dict_input)
+    generated_code = response['text'].strip()
+    
+    # Print the generated code
+    #generated_code = generated_code.pop(0) if generated_code[0] == ' ' or generated_code[0] == '\n' else generated_code
+    print("\nGenerated Code:\n", generated_code)
+    
+    # Prepare the local environment for code execution
+    
+    local_vars = {"df": df, "clear_string": clear_string}
+    
+    # Execute the generated code
+    try:
+        exec(generated_code, globals(), local_vars)
+        result = local_vars.get('result', 'No result found')
+    except Exception as e:
+        result = f"Error executing generated code: {e}"
+        user_query = f"Error in previus generated code:{generated_code} Error:{e}, Generate a new code for the query: {user_query}"
+        generate_and_execute_query(user_query)
+    print(result)
+    return result
 
 if __name__ == "__main__":
-    print(execute(input("Enter your question:")))
+    user_input = input("Enter your question: ")
+    result = generate_and_execute_query(user_input)
+    print("\nQuery Result:\n", result)
