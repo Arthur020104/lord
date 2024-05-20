@@ -7,7 +7,7 @@ from memory.CustomBuffer import CustomConversationTokenBufferMemory
 from agents.node import Node
 from agents.askforinfoNode import AskForInfoNode
 from agents.dataNode import DataNode
-from agents.prompts.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit
+from agents.prompts.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit,prompt_inicial_data_query
 from secret.apiOpenAI import api_key
 
 # Initialize the LLM
@@ -18,7 +18,7 @@ memory = CustomConversationTokenBufferMemory(max_token_limit=2000, ia_key="ai", 
 
 # Property information
 property_info = {
-    "UnitType": "CONDOMINIUM",
+    "UnitType": "HOUSE",
     "ListingType": "USED",
     "State": "Minas Gerais",
     "City": "Uberlândia",
@@ -56,12 +56,13 @@ ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={'EndOfConversati
 
 
 
-global node
+global node, start_conversation_chain
 #Node(llm=llm, prompt=prompt,children={}) #
-node = Node(llm=llm, children={"ConversationChain": conversation_chain, 'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit, 'AskForInfo': ask_for_info}, prompt=prompt_inicial_conversation,name="StartConversationChain")
-data_manager = DataNode(llm=llm, prompt=prompt,children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit, 'ConversationChain': conversation_chain, 'StartConversationChain': node},name="DataManager", askfoinfo=ask_for_info)
+start_conversation_chain = Node(llm=llm, children={"ConversationChain": conversation_chain, 'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit}, prompt=prompt_inicial_conversation,name="StartConversationChain")
+node = start_conversation_chain
+data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query,children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit, 'ConversationChain': conversation_chain, 'StartConversationChain': node},name="DataManager", askfoinfo=ask_for_info)
 
-conversation_chain.add_child('AskForInfo', ask_for_info)
+#conversation_chain.add_child('AskForInfo', ask_for_info)
 conversation_chain.add_child('DataManager', data_manager)
 conversation_chain.add_child('StartConversationChain', node)
 ask_for_info.add_child('DataManager', data_manager)
@@ -71,10 +72,10 @@ node_schedule_visit.add_child('DataManager', data_manager)
 node_schedule_visit.add_child('ConversationChain', conversation_chain)
 end_of_conversation_user_no_time.add_child('StartConversationChain', node)
 end_of_conversation_user_no_time.add_child('ConversationChain', conversation_chain)
-end_of_conversation_user_no_time.add_child('AskForInfo', ask_for_info)
+#end_of_conversation_user_no_time.add_child('AskForInfo', ask_for_info)
 end_of_conversation_user_no_time.add_child('ScheduleVisit', node_schedule_visit)
 end_of_conversation_user_no_time.add_child('DataManager', data_manager)
-
+node.add_child('DataManager', data_manager)
 
 
 
@@ -128,3 +129,9 @@ def inicial_chat(chat_history=[], nome_do_cliente='Arthur', nome_da_imobiliaria=
     })
     print(ai_chat)
     return ai_chat
+
+def delete_memory():
+    memory.delete_memory()
+    global node, start_conversation_chain
+    node = start_conversation_chain
+    

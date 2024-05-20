@@ -1,15 +1,14 @@
 import streamlit as st
-from agents.main import call_current_node, process_user_input
+from agents.main import call_current_node, process_user_input, delete_memory
+
 st.title("LORD")
 
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
     response = f"LordGpt: {call_current_node()['text']}"
-    #with st.chat_message("assistant"):
-    #    st.markdown(response)
-    
     st.session_state.messages.append({"role": "assistant", "content": response})
+
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -17,15 +16,18 @@ for message in st.session_state.messages:
 
 # React to user input
 if prompt := st.chat_input("What is up?"):
-    # Display user message in chat message container
     st.chat_message("user").markdown(prompt)
-    # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
     response_text = process_user_input(prompt)
     response = f"LordGpt: {call_current_node()['text']}"
-    
-    # Display assistant response in chat message container
     with st.chat_message("assistant"):
         st.markdown(response)
-    # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
+
+# Clear conversation button
+if st.button("Limpa conversa"):
+    st.session_state.messages = []
+    delete_memory()
+    response = f"LordGpt: {call_current_node()['text']}"
+    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.rerun()
