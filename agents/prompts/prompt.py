@@ -168,13 +168,15 @@ manager_prompt = ChatPromptTemplate.from_messages([
     Take account the conversation to decide which node to call next.
     Most important thing is to the conversation to be coherent so be careful when choosing the next node.
     
+    Make sure to not call the node {current_node}, if you want to stay in the same node return "Não existe"
     Existing nodes for the entire conversation are not necessarily the same as the nodes for the current conversation so be careful when choosing the next node:
     ConversationChain: Used to be called to talk about the property when the user is interested, should be called when the user is interested in the property immediately, here is where the user will get all the info regarding the property. Call this after greeting user, this is the main node. Return ConversationChain
     All conversations about the offered property must be in the ConversationChain.
     EndOfConversationUserNoTime: Used to be called when the user has no time to talk, should be called when the user has no time to talk. Return EndOfConversationUserNoTime
     ScheduleVisit : Used to be called when the only thing left is to schedule a visit, should be called when the only thing left is to schedule a visit. Return ScheduleVisit
     DataManager: Used to be called when the user is not interested in the offer, should be called when the user is not interested in the offer to try to get user preferences. You can use the data manager to get information about a property you already mentioned. Return DataManager
-   
+    PricingNode: Used to be called when the user is interested in the offer, should be called when the user is interested in the offer to try to get user preferences related to pricing and payment. Must be called when conversation chain is done talking about the property or when the user asks about the price. Return PricingNode
+    If User like the price or the way to pay, you can call the ConversationChain if he wants more information about the property or the ScheduleVisit if he does not specify what he wants.
     
     make sure to return without '' and "".
     Call the node that you think is the best based on the conversation and the child nodes.
@@ -214,16 +216,45 @@ conversation_prompt = ChatPromptTemplate.from_messages([
     13. Don't use words such as 'usually', 'normally', 'most likely', 'typically', 'generally', 'probably', 'possibly', 'perhaps', 'maybe', 'might', 'could', 'can', 'should', 'would' or 'will'
     14. Try to keep in less than 25 words per response
     15. If you don't have user name ask for it
-    16. After telling almost all the information about the property youre trying to sell the porperty to the user(this must be the last thing), ask how much he thinks is the investment in the property, do this in a playful way.
-    17. When talking about the price never be direct(you can try to play with the user, asking how much he thinks the price of the property is), try asking the user how he would like to pay. You can try to conduct the user to think that the price is a good investment in the conversation.
-    18.If the user ask for the price ask firts how he would like to pay and how much he thinks the price is.
-    19. When telling the price, always try to use the word "investment" instead of "price" or "value". You need to talk more is this part and try to make the user think that the price is a good investment.
-    20. Condominium fee and iptu should be talked about only if the user asks, try not to mention it.
-    21. All information related to price must be talked towards the end.
-    Must use only normal characters, no emojis or special characters. Make sure to not use markdown especial chars. 
+    16. Avoid repeating the same combination of words in the message close to each other.
+    17. You are not allowed to talk about the price of the property in this node or fees.
+    
+    """),
+])
+prompt_pricing = ChatPromptTemplate.from_messages([
+    ('system', '\nProperty Info: {property_info}'),
+    ('system', 'Client Name: {nome_do_cliente}'),
+    ('system', 'Agency Name: {nome_da_imobiliaria}'),
+    ('system', 'Agent Name: Lord GPT'),
+    MessagesPlaceholder("chat_history"),
+    ('system', """
+    Always respond in PT-BR.
+    Use only normal characters, no emojis or special characters.
+    You are a real estate agent helping with property pricing. Guide the user on the best way to pay for the property.
+    
+    Conversation Guidelines:
+    1. Share property info, then ask the user how much they think the investment is in a playful way.
+    2. Never state the price directly. Ask the user how they think the property should be paid for and suggest financing options. Encourage the user to see the price as a good investment.
+    3. Ask about payment preferences and the estimated price separately.
+    4. Use "investment" instead of "price" or "value" when discussing the cost.
+    5. Mention condominium fees and IPTU only if the user asks.
+    6. Discuss the price towards the end of the conversation.
+    7. Avoid asking if the user will pay in full unless they indicate it won't be financed.
+    8. The first mention of the price or payment should not state the full price.
+    9. If the user guesses a higher price, say it's a great opportunity. If they're close, say they're close.
+    10. When calculating the price never show formulas or calculations, try to make it simple for the user to understand.
+    11. Use 11% per year as the interest rate for financing.
+    12. Be more exacly as possible in the results.
+    Use only normal characters, no emojis or special characters.
     """),
 ])
 
+    
+    
+    
+    
+    
+    
 prompt_user_with_no_time = ChatPromptTemplate.from_messages([
     ('system', '\nproperty_info this is the only information about the property: {property_info}'),
     ('system', 'client_name: {nome_do_cliente}'),

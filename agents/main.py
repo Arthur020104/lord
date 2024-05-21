@@ -7,7 +7,7 @@ from memory.CustomBuffer import CustomConversationTokenBufferMemory
 from agents.node import Node
 from agents.askforinfoNode import AskForInfoNode
 from agents.dataNode import DataNode
-from agents.prompts.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit,prompt_inicial_data_query
+from agents.prompts.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit,prompt_inicial_data_query,prompt_pricing
 from secret.apiOpenAI import api_key
 
 # Initialize the LLM
@@ -46,13 +46,13 @@ dict_base = {
 
 # Initialize manager and conversation chain
 global ask_for_info
-llm3 = ChatOpenAI(api_key=api_key, temperature=0.0, model="gpt-3.5-turbo")
 end_of_conversation_user_no_time = Node(llm=llm, prompt=prompt_user_with_no_time, children={}, name="EndOfConversationUserNoTime")
 manager = LLMChain(prompt=manager_prompt, llm=llm)
 node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time},name="ScheduleVisit")
-conversation_chain = Node(prompt=conversation_prompt, llm=llm, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit},name="ConversationChain")
+llm_high_temp = ChatOpenAI(api_key=api_key, temperature=0.3, model="gpt-4o")
+conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit},name="ConversationChain")
 ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit,'ConversationChain': conversation_chain},name="AskForInfo")
-# Global node
+pricing_node = Node(llm=llm, prompt=prompt_pricing, children={},name="PricingNode")
 
 
 
@@ -64,18 +64,23 @@ data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query,children={'End
 
 #conversation_chain.add_child('AskForInfo', ask_for_info)
 conversation_chain.add_child('DataManager', data_manager)
+conversation_chain.add_child('PricingNode', pricing_node)
 conversation_chain.add_child('StartConversationChain', node)
 ask_for_info.add_child('DataManager', data_manager)
 ask_for_info.add_child("StartConversationChain", node)
+ask_for_info.add_child('PricingNode', pricing_node)
+node_schedule_visit.add_child('PricingNode', pricing_node)
 node_schedule_visit.add_child('StartConversationChain', node)
 node_schedule_visit.add_child('DataManager', data_manager)
 node_schedule_visit.add_child('ConversationChain', conversation_chain)
 end_of_conversation_user_no_time.add_child('StartConversationChain', node)
+end_of_conversation_user_no_time.add_child('PricingNode', pricing_node)
 end_of_conversation_user_no_time.add_child('ConversationChain', conversation_chain)
 #end_of_conversation_user_no_time.add_child('AskForInfo', ask_for_info)
 end_of_conversation_user_no_time.add_child('ScheduleVisit', node_schedule_visit)
 end_of_conversation_user_no_time.add_child('DataManager', data_manager)
 node.add_child('DataManager', data_manager)
+node.add_child('PriceNode', pricing_node)
 
 
 
@@ -88,7 +93,7 @@ def call_current_node():
     return response
 
 def process_user_input(input):
-    global node, dict_base
+    global node, dict_base, last_output
     memory.add(human_input=input, ia_output=last_output)
     node.process_input(memory.get_memory()[-1])
     
@@ -107,28 +112,6 @@ def process_user_input(input):
 
 if __name__ == '__main__':
     print(node.call_chain())
-
-def inicial_chat(chat_history=[], nome_do_cliente='Arthur', nome_da_imobiliaria='ginga imoveis', last_interaction=''):
-    if chat_history is None:
-        chat_history = []
-    start_conversation = ""
-    if len(chat_history) == 0:
-        start_conversation = """Use this example to start the conversation:
-        "Olá, [Nome do Cliente], meu nome é [Seu Nome], e estou ligando da [Nome da Imobiliária]. Desculpe interromper seu dia. Pode me conceder um minuto para discutir algo que pode ser muito vantajoso para você?"
-        Make sure to replace the placeholders with the correct information."""
-
-    print(f'Current chat history: {chat_history}')
-    llm = ChatOpenAI(api_key=api_key, temperature=0.0, model="gpt-3.5-turbo")
-    inicial_chat_chain = LLMChain(prompt=prompt_inicial_conversation, llm=llm)
-    ai_chat = inicial_chat_chain.invoke({
-        'chat_history': chat_history,
-        'nome_do_cliente': nome_do_cliente,
-        'nome_da_imobiliaria': nome_da_imobiliaria,
-        'property_info': property_info,
-        'last_interaction': last_interaction
-    })
-    print(ai_chat)
-    return ai_chat
 
 def delete_memory():
     memory.delete_memory()
