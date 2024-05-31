@@ -11,11 +11,11 @@ def escutar_e_transcrever(audio_path='playSound.wav'):
             audio = microfone.listen(source)
         except sr.WaitTimeoutError:
             print("Não entendi")
-            return ''
+            return 'User said nothing'
     try:
         frase = microfone.recognize_google(audio, language='pt-BR')
     except sr.UnknownValueError:
         print("User said nothing")
-        return ''
+        return 'User said nothing'
     return frase
 
