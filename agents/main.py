@@ -9,6 +9,7 @@ from agents.askforinfoNode import AskForInfoNode
 from agents.dataNode import DataNode
 from agents.prompts.prompt import prompt_inicial_conversation, manager_prompt, conversation_prompt,prompt, prompt_user_with_no_time, prompt_schedule_visit,prompt_inicial_data_query,prompt_pricing
 from secret.apiOpenAI import api_key
+import json
 
 # Initialize the LLM
 llm = ChatOpenAI(api_key=api_key, temperature=0.0, model="gpt-4o")
@@ -30,7 +31,7 @@ property_info = {
     "CondominiumFee": 590.0,
     "UsableAreas": 206,
     "Bedrooms": 3,
-    "Bathrooms": 2,
+    "Bathrooms": 3,
     "Suites": 3.0,
     "ParkingSpaces": 4.0
 }
@@ -47,41 +48,34 @@ dict_base = {
 # Initialize manager and conversation chain
 global ask_for_info
 end_of_conversation_user_no_time = Node(llm=llm, prompt=prompt_user_with_no_time, children={}, name="EndOfConversationUserNoTime")
+#llm_manager = ChatOpenAI(api_key=api_key, temperature=0.3, model="gpt-4o")
 manager = LLMChain(prompt=manager_prompt, llm=llm)
-node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time},name="ScheduleVisit")
+node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={},name="ScheduleVisit")
 llm_high_temp = ChatOpenAI(api_key=api_key, temperature=0.3, model="gpt-4o")
-conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit},name="ConversationChain")
-ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit,'ConversationChain': conversation_chain},name="AskForInfo")
+conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={},name="ConversationChain")
+ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={},name="AskForInfo")
 pricing_node = Node(llm=llm, prompt=prompt_pricing, children={},name="PricingNode")
-
-
 
 global node, start_conversation_chain
 #Node(llm=llm, prompt=prompt,children={}) #
-start_conversation_chain = Node(llm=llm, children={"ConversationChain": conversation_chain, 'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit}, prompt=prompt_inicial_conversation,name="StartConversationChain")
+start_conversation_chain = Node(llm=llm, children={}, prompt=prompt_inicial_conversation,name="StartConversationChain")
 node = start_conversation_chain
-data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query,children={'EndOfConversationUserNoTime': end_of_conversation_user_no_time, 'ScheduleVisit': node_schedule_visit, 'ConversationChain': conversation_chain, 'StartConversationChain': node},name="DataManager", askfoinfo=ask_for_info)
+data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query,children={},name="DataManager", askfoinfo=ask_for_info)
 
-#conversation_chain.add_child('AskForInfo', ask_for_info)
-conversation_chain.add_child('DataManager', data_manager)
-conversation_chain.add_child('PricingNode', pricing_node)
-conversation_chain.add_child('StartConversationChain', node)
-ask_for_info.add_child('DataManager', data_manager)
-ask_for_info.add_child("StartConversationChain", node)
-ask_for_info.add_child('PricingNode', pricing_node)
-node_schedule_visit.add_child('PricingNode', pricing_node)
-node_schedule_visit.add_child('StartConversationChain', node)
-node_schedule_visit.add_child('DataManager', data_manager)
-node_schedule_visit.add_child('ConversationChain', conversation_chain)
-end_of_conversation_user_no_time.add_child('StartConversationChain', node)
-end_of_conversation_user_no_time.add_child('PricingNode', pricing_node)
-end_of_conversation_user_no_time.add_child('ConversationChain', conversation_chain)
-#end_of_conversation_user_no_time.add_child('AskForInfo', ask_for_info)
-end_of_conversation_user_no_time.add_child('ScheduleVisit', node_schedule_visit)
-end_of_conversation_user_no_time.add_child('DataManager', data_manager)
-node.add_child('DataManager', data_manager)
-node.add_child('PriceNode', pricing_node)
-
+all_nodes = {
+    "AskForInfo": ask_for_info,
+    "ConversationChain": conversation_chain,
+    "DataManager": data_manager,
+    "EndOfConversationUserNoTime": end_of_conversation_user_no_time,
+    "ScheduleVisit": node_schedule_visit,
+    "PricingNode": pricing_node,
+    'StartConversationChain': start_conversation_chain
+}
+for node_name in all_nodes:
+    cnode = all_nodes[node_name]
+    for child_name in all_nodes:
+        cnode.add_child(child_name,all_nodes[child_name])
+    #print(f'\n\nNode{node_name} children: {cnode.get_children()}')
 
 
 def call_current_node():
@@ -89,7 +83,8 @@ def call_current_node():
     dict_base['chat_history'] = memory.get_memory_tuple()
     response = node.call_chain(dict_base)
     last_output = response['text']
-    print(ask_for_info.user_details)
+    #print(ask_for_info.user_details)
+    #print(f"\n\n\n\n {response}\n\n\n\n")
     return response
 
 def process_user_input(input):
@@ -98,21 +93,21 @@ def process_user_input(input):
     node.process_input(memory.get_memory()[-1])
     
     dict_base['chat_history'] = memory.get_memory_tuple()
-    node_called = manager.invoke({
-        'chat_history': memory.get_memory_tuple(),
-        'nodes': node.get_children().keys(),
-        'current_node': node.get_name()
-    })
-    print(node_called)
-    node_called = node_called['text']
-    print(node.get_children())
-    print(f'Calling node: {node_called}')
-    if node_called != "Não existe":
-        node = node.get_children()[node_called]
-
-if __name__ == '__main__':
-    print(node.call_chain())
-
+    for i in range(3):
+        try:
+            node_called = manager.invoke({
+            'chat_history': memory.get_memory_tuple(),
+            'nodes': node.get_children().keys(),
+            'current_node': node.get_name()
+            })
+            node_called = node_called['text']
+            data_dict = json.loads(node_called)
+            node_called = data_dict['node']
+            if node_called != "Não existe":
+                node = node.get_children()[node_called]
+            break
+        except:
+            continue
 def delete_memory():
     memory.delete_memory()
     global node, start_conversation_chain
