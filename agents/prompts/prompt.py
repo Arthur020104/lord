@@ -1,5 +1,5 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-
+#Usando para gerenciar a primeira mensagem ao usuario
 prompt_inicial_conversation = ChatPromptTemplate.from_messages([
     ('system', '\nProperty Info: {property_info}'),
     ('system', 'Client Name: {nome_do_cliente}'),
@@ -130,6 +130,7 @@ Alternativa 5
 "Claro, [Nome do Cliente], e se por acaso você conhecer alguém que possa se interessar, ficaria muito agradecido se pudesse me indicar. Além disso, oferecemos benefícios interessantes para referências que resultam em visitas ou compras."
 """),
 ])
+#Usando para o gerenciamento dos nós
 manager_prompt = ChatPromptTemplate.from_messages([
     MessagesPlaceholder("chat_history"),
     ('system', """
@@ -145,7 +146,7 @@ manager_prompt = ChatPromptTemplate.from_messages([
     
     - If the user is interested in more property details, return `ConversationChain`.
     - If the user indicates they are busy, return `EndOfConversationUserNoTime`.
-    - If the user wants to schedule a visit, return `ScheduleVisit`.
+    - If the user wants to schedule a visit, you can call this node when the conversation node already got the user interest in the property. Return `ScheduleVisit`.
     - If the user is not interested in the offer, return `DataManager`.
     - If the user asks about pricing, return `PricingNode`.
     - If the best action is to continue in the current node, return `Não existe` The current node will be called again. So if i want the conversation to stay in {current_node} i should return `Não existe`.
@@ -158,9 +159,7 @@ manager_prompt = ChatPromptTemplate.from_messages([
 ])
 
 
-
-# AskForInfo: Is used when user is not interested in the offer, should be called when the user is not interested in the offer to try to get user preferences. Should only get out of the askforinfo node if user explicity tell that the current preferences are the ones he wants. Return AskForInfo
-
+#Usando pra troca de mensagens com usuario, responsavel por apresentar para o usario as caracteristicas do imovel
 conversation_prompt = ChatPromptTemplate.from_messages([
     ('system', '\nproperty_info this is the only information about the property: {property_info}'),
     ('system', 'client_name: {nome_do_cliente}'),
@@ -194,6 +193,7 @@ conversation_prompt = ChatPromptTemplate.from_messages([
     
     """),
 ])
+#Usando para o no de preço e pagamento, relevante para o usuario
 prompt_pricing = ChatPromptTemplate.from_messages([
     ('system', '\nProperty Info: {property_info}'),
     ('system', 'Client Name: {nome_do_cliente}'),
@@ -237,7 +237,7 @@ prompt_pricing = ChatPromptTemplate.from_messages([
     
     
     
-    
+#Usando para tentar reagendar a conversa com o usuario
 prompt_user_with_no_time = ChatPromptTemplate.from_messages([
     ('system', '\nproperty_info this is the only information about the property: {property_info}'),
     ('system', 'client_name: {nome_do_cliente}'),
@@ -268,7 +268,7 @@ Versão 5
 Must use only normal characters, no emojis or special characters. Make sure to not use markdown especial chars. 
 """),
 ])
-
+#Usando para agendar a visita com o usuario
 prompt_schedule_visit = ChatPromptTemplate.from_messages([
     ('system', '\nProperty Info: {property_info}'),
     ('system', 'Client Name: {nome_do_cliente}'),
@@ -295,7 +295,7 @@ Guidelines:
 """),
 ])
 
-
+#Usando para processamento de dados, nao relevante para o usuario
 prompt_inicial_data_query = ChatPromptTemplate.from_messages([
     ('system', '\nproperty_info this is the only information about the property: {property_info}'),
     ('system', 'client_name: {nome_do_cliente}'),
@@ -309,7 +309,8 @@ prompt_inicial_data_query = ChatPromptTemplate.from_messages([
      Never translate query names, always use the same name as the DataFrame columns.
      Remenber that the datamaneger only works in english, and all fields must be in english."""),
 ])
-
+#Usando para criar a mensagem com os dados retornados do banco de dados
+#Pode ser melhorado para ser mais especifico
 prompt_afther_data_query = ChatPromptTemplate.from_messages([
     ('system', '\nproperty_info this is the only information about the property: {property_info}'),
     ('system', 'client_name: {nome_do_cliente}'),
