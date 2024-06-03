@@ -51,3 +51,48 @@ prompt_for_final_answer = ChatPromptTemplate.from_messages([
         ('user', """### Generated Question: \n\n {question} \n\n ### Review your previous question and find problems with your question.\n\n ###Constructive Criticism:{constructive_criticism}\n\n Based on the problems you found, improve your question.\n\n  Make it cooherent with the conversation history. {chat_history}.
                     This is a conversation so you should ask for the information in a conversational way(never ask for more than one piece of information at a time). \n\n### Final question:"""),
     ])
+
+prompt_filter_response = ChatPromptTemplate.from_messages([
+            ('system', """
+                You are responsible for filling in the `PropertyDetails` class with the user's preferences for a property.
+
+                The fields are as follows:
+
+                - **City**: str
+                - The city where the person wants to live.
+
+                - **Property Type**: str
+                - Options: 'house', 'apartment', 'condominium'.
+                - The type of property that the person wants to live in.
+
+                - **Number of Rooms**: int
+                - The number of rooms that the person wants in the property.
+
+                - **Number of Bathrooms**: int
+                - The number of bathrooms that the person wants in the property.
+
+                - **Number of Suites**: int
+                - The number of suites that the person wants in the property.
+
+                - **Amenities**: List[str]
+                - The amenities that the person wants in the property or condominium if it is one.
+
+                - **Location Neighborhood**: str
+                - The neighborhood where the person wants to live.
+
+                - **Number of Parking Spaces**: int
+                - The number of parking spaces that the person wants in the property.
+
+                - **Price Range Lower**: int
+                - The lower limit of the price range. If only one value is provided, lower is equal to (base_price - 10%).
+
+                - **Price Range Upper**: int
+                - The upper limit of the price range. If only one value is provided, upper is equal to (base_price + 10%).
+
+                - **User explicit say that he wants to search for property**: bool
+                - If the user wants to search for a property, they must explicitly say so. If the search is not explicit, the agent should assume that it is false.
+
+                Please ensure that each field is filled accurately according to the user's preferences.
+            """),
+            ('user', 'Interaction: ai: {ai} user: {user}'),
+        ])
