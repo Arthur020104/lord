@@ -26,7 +26,6 @@ def ask_for_info(ask_for, chat_history=None, gpt_model="gpt-3.5-turbo", improvem
         final_result = final_chain.invoke({
             'question': answer,
             'constructive_criticism': constructive_criticism,
-            'conversation_history': chat_history,
             'chat_history': chat_history
         })
         return final_result

@@ -8,9 +8,10 @@ from memory.CustomBuffer import CustomConversationTokenBufferMemory
 from agents.node import Node
 from agents.askforinfoNode import AskForInfoNode
 from agents.dataNode import DataNode
-from agents.prompts.prompt import (prompt_inicial_conversation, manager_prompt, conversation_prompt,
+from agents.prompts.string_prompts import (prompt_inicial_conversation, conversation_prompt,
                                    prompt, prompt_user_with_no_time, prompt_schedule_visit,
                                    prompt_inicial_data_query, prompt_pricing)
+from agents.prompts.prompt import manager_prompt
 
 from secret.apiOpenAI import api_key as API_KEY
 
@@ -52,7 +53,7 @@ end_of_conversation_user_no_time = Node(llm=llm, prompt=prompt_user_with_no_time
 manager_llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-4o")
 manager = LLMChain(prompt=manager_prompt, llm=manager_llm)
 node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={}, name="ScheduleVisit")
-llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.4, model="gpt-3.5-turbo")
+llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-3.5-turbo")
 conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={}, name="ConversationChain")
 ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={}, name="AskForInfo")
 pricing_node = Node(llm=llm, prompt=prompt_pricing, children={}, name="PricingNode")

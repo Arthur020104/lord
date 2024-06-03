@@ -4,6 +4,7 @@ from agents.node import Node
 from agents.prompts.prompt import prompt_afther_data_query
 from langchain.chains.llm import LLMChain
 from tools.dataManager import generate_and_execute_query
+from agents.prompts.string_prompts import basic_prompt
 sys.path.append('../')
 from secret.apiOpenAI import api_key as API_KEY
 class DataNode(Node):
@@ -13,6 +14,7 @@ class DataNode(Node):
         
     def call_chain(self, input_dict):
         try:
+            input_dict['system_prompt'] = self.prompt
             response = self.chain.invoke(input_dict)
             print(response)
             response_text = response['text']
