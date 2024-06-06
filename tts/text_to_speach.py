@@ -6,11 +6,22 @@ from elevenlabs import save
 from elevenlabs.client import ElevenLabs
 import threading
 from fuzzywuzzy import fuzz
-
+from secret.elabapikey import api_key
+CSV_FILEPATH = 'C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/Audios/audio_text.csv'
 # Initialize the ElevenLabs client with your API key
 client = ElevenLabs(api_key=api_key)
+def text_to_speech(text,similarity_threshold = 0.82):
+    if not os.path.exists(CSV_FILEPATH):
+        return generate_text_to_speech(text)
+    else:
+        df = pd.read_csv(CSV_FILEPATH)
 
-def text_to_speech(text):
+    for index, row in df.iterrows():
+        similarity = calculate_similarity(text, row['text'])
+        if similarity >= similarity_threshold:
+            return row['file_path']
+    return generate_text_to_speech(text)
+def generate_text_to_speech(text):
     current_time = datetime.now().strftime("%H%M%S")
     output = f'C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/Audios/output{current_time}.mp3'
 
@@ -27,7 +38,7 @@ def text_to_speech(text):
     )
     save(audio, output)
     
-    thread = threading.Thread(target=save_audio_and_text, args=(output, text, 0.9))  # Example similarity threshold
+    thread = threading.Thread(target=save_audio_and_text, args=(output, text, 1))  # Example similarity threshold
     thread.start()
 
     return output
@@ -36,21 +47,26 @@ def open_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as infile:
         return infile.read()
 
-def save_audio_and_text(output, text, similarity_threshold):
-    csv_file = 'Audios/audio_text.csv'
-    if not os.path.exists(csv_file):
+def save_audio_and_text(output, text, similarity_threshold = 1):
+    if not os.path.exists(CSV_FILEPATH):
         df = pd.DataFrame(columns=['text', 'file_path'])
+        df.to_csv(CSV_FILEPATH, index=False)
+        new_entry = pd.DataFrame({'text': [text], 'file_path': [output]})
+        df = pd.concat([df, new_entry], ignore_index=True)
+        df.to_csv(CSV_FILEPATH, index=False)
+        return
     else:
-        df = pd.read_csv(csv_file)
+        df = pd.read_csv(CSV_FILEPATH)
 
     # Procurando por texto similar
     for index, row in df.iterrows():
-        similarity = fuzz.ratio(text, row['text']) / 100.0
-        if similarity >= similarity_threshold:
-            return row['file_path']  # Se bateu, retorna o path do audio
-
-    # Se nao encontrou similar, salva o texto...
-    new_entry = pd.DataFrame({'text': [text], 'file_path': [output]})
-    df = pd.concat([df, new_entry], ignore_index=True)
-    df.to_csv(csv_file, index=False)
-    return 0  # 0 indica que nenhum texto foi encontrado
+        similarity = calculate_similarity(text, row['text'])
+        if similarity != similarity_threshold:
+            new_entry = pd.DataFrame({'text': [text], 'file_path': [output]})
+            df = pd.concat([df, new_entry], ignore_index=True)
+            df.to_csv(CSV_FILEPATH, index=False)
+            return
+def calculate_similarity(text1, text2):
+    similarity = fuzz.ratio(text1, text2)/100
+    print(f"Similarity between '{text1}' and '{text2}': {similarity}")
+    return similarity  
