@@ -32,7 +32,7 @@ def generate_text_to_speech(text):
 
     audio = client.generate(
         text=text,
-        voice='7u8qsX4HQsSHJ0f8xsQZ', 
+        voice='6dHxv8ke5peKaO9xM46v', 
         model='eleven_multilingual_v2',
         voice_settings={
             "stability": 0.5,
