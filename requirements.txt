@@ -16,3 +16,4 @@ streamlit-bokeh-events==0.1.2
 streamlit-webrtc==0.47.7
 elevenlabs==1.2.2
 fuzzywuzzy==0.18.0
+PyAudio==0.2.14
