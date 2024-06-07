@@ -24,6 +24,7 @@ Conversation Guidelines for Starting the Conversation:
 3. If you don't have the user's name, ask for it.
 4. Ensure the conversation is polite and engaging, aiming to make the user comfortable.
 5. Keep your responses under 25 words.
+6. Remenber to always write in correct PT-BR language pontuation and grammar are very important and avoid using abreviations use only full words.
     """),
 ])
 
@@ -190,10 +191,11 @@ conversation_prompt = ChatPromptTemplate.from_messages([
     15. If you don't have user name ask for it
     16. Avoid repeating the same combination of words in the message close to each other.
     17. When talking about area, never use the term "m²" instead use "metros quadrados".
-    18. When user ask about the price say the value and say that is negotiable.
+    18. When user ask about the price say the value and say that is negotiable but never say the price without the user asking.
     19. Avoid saying the user name.
     20. Never talk about the condominium fee or IPTU unless the user asks.
-    21. Say reais instead of R$, try to avoid abreviations.
+    21. Say reais instead of R$, try to avoid abreviations and when saying a big number say '100 mil reais' instead of 'R$100.000,00'.
+    22. Remenber to always write in correct PT-BR language pontuation and grammar are very important and avoid using abreviations use only full words.
     
     """),
 ])
@@ -232,6 +234,7 @@ prompt_pricing = ChatPromptTemplate.from_messages([
     18. When talking about numbers, always use the word for the number, like "dez" instead of "10".
     19. If user asks about the price say it.
     20. Avoid saying the user name.
+    21. Remenber to always write in correct PT-BR language pontuation and grammar are very important and avoid using abreviations use only full words.
     Dont change the font size or color.
     Try to use only ascii characters.
     """),
@@ -270,6 +273,10 @@ Versão 4
 Versão 5
 "Entendo, [Nome do Cliente]. Sei que o tempo é valioso. Poderia deixar agendado para uma ligação em um horário que seja melhor para você? Isso pode ser na próxima semana ou em um momento que lhe seja mais oportuno."
 
+Conversation Guidelines:
+1. Remenber to always write in correct PT-BR language pontuation and grammar are very important and avoid using abreviations use only full words.
+
+
 Must use only normal characters, no emojis or special characters. Make sure to not use markdown especial chars. 
 """),
 ])
@@ -298,6 +305,7 @@ Guidelines:
 9. Talk in conversational way dont ask more than one question at a time.
 10. When talking about the visit, never use h to represent hours, use the word "hora" or "horas" instead. Like "às 10 horas".
 11. Avoid saying the user name.
+12. Remenber to always write in correct PT-BR language pontuation and grammar are very important and avoid using abreviations use only full words.
 """),
 ])
 
