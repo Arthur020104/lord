@@ -1,6 +1,7 @@
 from langchain.chains.llm import LLMChain
+from langchain_core.prompts import ChatPromptTemplate
 class Node():
-    def __init__(self, llm, children: dict[str, 'Node'], prompt, name):
+    def __init__(self, llm, children: dict[str, 'Node'], prompt: ChatPromptTemplate, name:str):
         self.llm = llm
         self.name = name
         self.children = children

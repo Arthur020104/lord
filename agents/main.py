@@ -16,7 +16,7 @@ from secret.apiOpenAI import api_key as API_KEY
 
 
 # Initialize the LLM
-llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-3.5-turbo")
+llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-4o")
 
 # Initialize memory
 memory = CustomConversationTokenBufferMemory(max_token_limit=2000, ia_key="ai", human_key="human", order=1)
@@ -52,7 +52,7 @@ end_of_conversation_user_no_time = Node(llm=llm, prompt=prompt_user_with_no_time
 manager_llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-4o")
 manager = LLMChain(prompt=manager_prompt, llm=manager_llm)
 node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={}, name="ScheduleVisit")
-llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.4, model="gpt-3.5-turbo")
+llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.2, model="gpt-4o")
 conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={}, name="ConversationChain")
 ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={}, name="AskForInfo")
 pricing_node = Node(llm=llm, prompt=prompt_pricing, children={}, name="PricingNode")
@@ -63,12 +63,12 @@ data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query, children={}, 
 
 # Create a dictionary for all nodes
 all_nodes = {
-    "AskForInfo": ask_for_info,
+   #"AskForInfo": ask_for_info,
     "ConversationChain": conversation_chain,
-    "DataManager": data_manager,
+   # "DataManager": data_manager,
     "EndOfConversationUserNoTime": end_of_conversation_user_no_time,
     "ScheduleVisit": node_schedule_visit,
-    "PricingNode": pricing_node,
+    #"PricingNode": pricing_node,
     'StartConversationChain': start_conversation_chain
 }
 
