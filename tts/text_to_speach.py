@@ -7,7 +7,7 @@ from elevenlabs.client import ElevenLabs
 import threading
 from fuzzywuzzy import fuzz
 from secret.elabapikey import api_key
-CSV_FILEPATH = 'C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/Audios/audio_text.csv'
+CSV_FILEPATH = '\lord\Audios\audio_text.csv'
 # Initialize the ElevenLabs client with your API key
 client = ElevenLabs(api_key=api_key)
 def text_to_speech(text,similarity_threshold = 0.82):
@@ -23,7 +23,7 @@ def text_to_speech(text,similarity_threshold = 0.82):
     return generate_text_to_speech(text)
 def generate_text_to_speech(text):
     current_time = datetime.now().strftime("%H%M%S")
-    output = f'C:/Users/arthu/OneDrive/Desktop/Repo/LLMProject/Audios/output{current_time}.mp3'
+    output = f'\lord\Audios\output{current_time}.mp3'
 
     audio = client.generate(
         text=text,
