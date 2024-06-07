@@ -7,10 +7,13 @@ from elevenlabs.client import ElevenLabs
 import threading
 from fuzzywuzzy import fuzz
 from secret.elabapikey import api_key
+from stt.audio import play_audio_thread
+
 CSV_FILEPATH = './Audios/audio_text.csv'
 # Initialize the ElevenLabs client with your API key
 client = ElevenLabs(api_key=api_key)
-def text_to_speech(text,similarity_threshold = 0.82):
+def text_to_speech(text,audioTeste = './Audios/waitSound(0)',similarity_threshold = 0.82):
+    
     if not os.path.exists(CSV_FILEPATH):
         return generate_text_to_speech(text)
     else:
@@ -20,7 +23,9 @@ def text_to_speech(text,similarity_threshold = 0.82):
         similarity = calculate_similarity(text, row['text'])
         if similarity >= similarity_threshold:
             return row['file_path']
+    play_audio_thread(audioTeste)
     return generate_text_to_speech(text)
+
 def generate_text_to_speech(text):
     current_time = datetime.now().strftime("%H%M%S")
     output = f'./Audios/output{current_time}.mp3'
