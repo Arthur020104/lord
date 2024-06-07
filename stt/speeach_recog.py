@@ -1,7 +1,7 @@
 import speech_recognition as sr
 from stt.audio import play_audio_thread
 
-def escutar_e_transcrever(audio_path='playSound.wav'):
+def escutar_e_transcrever(audio_path='./Audios/playSound.wav'):
     microfone = sr.Recognizer()
     play_audio_thread(audio_path,0.65)
     with sr.Microphone() as source:

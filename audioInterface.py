@@ -7,7 +7,7 @@ import time
 import random
 import threading
 
-files = [f'waitSound ({i}).mp3' for i in range(3)]
+files = [f'./Audios/waitSound ({i}).mp3' for i in range(3)]
 
 def play_wait_sound_if_slow(threshold, output_list):
     """Tocar um som de espera se output_list estiver vazio após threshold segundos."""
