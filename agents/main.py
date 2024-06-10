@@ -70,6 +70,7 @@ def call_current_node():
     global node, dict_base, last_output
     try:
         dict_base['chat_history'] = memory.get_memory_tuple()
+        dict_base['property_info'] = node.filter_property_info(property_info)
         response = node.call_chain(dict_base)
         last_output = response['text']
         return response
