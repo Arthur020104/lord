@@ -196,6 +196,7 @@ conversation_prompt = ChatPromptTemplate.from_messages([
     20. Never talk about the condominium fee or IPTU unless the user asks.
     21. Say reais instead of R$, try to avoid abreviations and when saying a big number say '100 mil reais' instead of 'R$100.000,00'.
     22. Remenber to always write in correct PT-BR language pontuation and grammar are very important and avoid using abreviations use only full words.
+    23. During the cold call, present only the following features of the property: location, number of bedrooms/suites, property size, number of parking spaces, and down payment amount. Avoid mentioning other characteristics that might overwhelm the client with unnecessary information during the initial contact.
     
     """),
 ])
