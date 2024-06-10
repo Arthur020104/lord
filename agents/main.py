@@ -13,46 +13,32 @@ from agents.prompts.prompt import (prompt_inicial_conversation, manager_prompt, 
                                    prompt_inicial_data_query, prompt_pricing)
 
 from secret.apiOpenAI import api_key as API_KEY
-
-
+from agents.informacao_propriedade import empreendimento
+model4o = "gpt-4o"
+model35_turbo = "gpt-3.5-turbo"
 # Initialize the LLM
-llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-4o")
+llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model=model4o)
 
 # Initialize memory
 memory = CustomConversationTokenBufferMemory(max_token_limit=2000, ia_key="ai", human_key="human", order=1)
 
 # Property information
-property_info = {
-    "UnitType": "HOUSE",
-    "State": "Minas Gerais",
-    "City": "Uberlândia",
-    "Neighborhood": "Jardim Karaíba",
-    "Street": "Avenida Vereador Junior de Oliveira",
-    "ZipCode": 38410665,
-    "Title": "Casa Nova a Venda no Condomínio Dois Irmãos",
-    "Price": 1700000,
-    "CondominiumFee": 590.0,
-    "UsableAreas": 206,
-    "Bedrooms": 3,
-    "Bathrooms": 3,
-    "Suites": 3.0,
-    "ParkingSpaces": 4.0
-}
+property_info = empreendimento
 
 # Global dictionary
 dict_base = {
     'chat_history': [],
     'nome_do_cliente': 'Arthur',
     'nome_da_imobiliaria': 'ginga imoveis',
-    'property_info': property_info,
+    'property_info': empreendimento,
 }
 
 # Initialize nodes
 end_of_conversation_user_no_time = Node(llm=llm, prompt=prompt_user_with_no_time, children={}, name="EndOfConversationUserNoTime")
-manager_llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model="gpt-4o")
+manager_llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model=model4o)
 manager = LLMChain(prompt=manager_prompt, llm=manager_llm)
 node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={}, name="ScheduleVisit")
-llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.2, model="gpt-4o")
+llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.2, model=model4o)
 conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={}, name="ConversationChain")
 ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={}, name="AskForInfo")
 pricing_node = Node(llm=llm, prompt=prompt_pricing, children={}, name="PricingNode")
