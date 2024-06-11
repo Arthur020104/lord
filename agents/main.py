@@ -1,23 +1,14 @@
-import os
-from langchain_openai import ChatOpenAI
-from langchain.chains.llm import LLMChain
-from langchain_core.prompts import ChatPromptTemplate, FewShotChatMessagePromptTemplate, MessagesPlaceholder
-import sys
+from langchain.schema.output_parser import StrOutputParser
 import json
 from memory.CustomBuffer import CustomConversationTokenBufferMemory
-from agents.node import Node
-from agents.askforinfoNode import AskForInfoNode
-from agents.dataNode import DataNode
-from agents.prompts.prompt import (prompt_inicial_conversation, manager_prompt, conversation_prompt,
-                                   prompt, prompt_user_with_no_time, prompt_schedule_visit,
-                                   prompt_inicial_data_query, prompt_pricing)
-
-from secret.apiOpenAI import api_key as API_KEY
+from agents.prompts.prompt import manager_prompt
 from agents.informacao_propriedade import empreendimento
-model4o = "gpt-4o"
-model35_turbo = "gpt-3.5-turbo"
-# Initialize the LLM
-llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model=model4o)
+#importing nodes
+from agents.node_obj.schedule_visit_chain import node_schedule_visit
+from agents.node_obj.end_of_conversation_user_no_time import end_of_conversation_user_no_time
+from agents.node_obj.conversation_chain import conversation_chain
+from agents.node_obj.start_conversation_chain import start_conversation_chain
+from agents.LLM import generate_llm
 
 # Initialize memory
 memory = CustomConversationTokenBufferMemory(max_token_limit=2000, ia_key="ai", human_key="human", order=1)
@@ -33,29 +24,18 @@ dict_base = {
     'property_info': empreendimento,
 }
 
-# Initialize nodes
-end_of_conversation_user_no_time = Node(llm=llm, prompt=prompt_user_with_no_time, children={}, name="EndOfConversationUserNoTime")
-manager_llm = ChatOpenAI(api_key=API_KEY, temperature=0.0, model=model4o)
-manager = LLMChain(prompt=manager_prompt, llm=manager_llm)
-node_schedule_visit = Node(prompt=prompt_schedule_visit, llm=llm, children={}, name="ScheduleVisit")
-llm_high_temp = ChatOpenAI(api_key=API_KEY, temperature=0.2, model=model4o)
-conversation_chain = Node(prompt=conversation_prompt, llm=llm_high_temp, children={}, name="ConversationChain")
-ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={}, name="AskForInfo")
-pricing_node = Node(llm=llm, prompt=prompt_pricing, children={}, name="PricingNode")
+manager = manager_prompt| generate_llm(temp=0, model=4) | StrOutputParser()
 
-# Initialize start and data manager nodes
-start_conversation_chain = Node(llm=llm, children={}, prompt=prompt_inicial_conversation, name="StartConversationChain")
-data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query, children={}, name="DataManager", askfoinfo=ask_for_info)
+#ask_for_info = AskForInfoNode(llm=llm, prompt=prompt, children={}, name="AskForInfo")
+#pricing_node = Node(llm=llm, prompt=prompt_pricing, children={}, name="PricingNode")
+#data_manager = DataNode(llm=llm, prompt=prompt_inicial_data_query, children={}, name="DataManager", askfoinfo=ask_for_info)
 
 # Create a dictionary for all nodes
 all_nodes = {
-   #"AskForInfo": ask_for_info,
+    'StartConversationChain': start_conversation_chain,
     "ConversationChain": conversation_chain,
-   # "DataManager": data_manager,
-    "EndOfConversationUserNoTime": end_of_conversation_user_no_time,
     "ScheduleVisit": node_schedule_visit,
-    #"PricingNode": pricing_node,
-    'StartConversationChain': start_conversation_chain
+    "EndOfConversationUserNoTime": end_of_conversation_user_no_time
 }
 
 # Add children to nodes
@@ -92,7 +72,7 @@ def process_user_input(user_input):
                     'nodes': list(node.get_children().keys()),
                     'current_node': node.get_name()
                 })
-                node_called = node_called['text']
+                node_called = node_called
                 data_dict = json.loads(node_called)
                 node_called = data_dict['node']
                 print(f"Node called: {node_called}")
