@@ -51,19 +51,19 @@ empreendimento = {
         "portoes_eletronicos": True,
         "controle_acesso": True
     },
-    "amenidades": [
-        "Espaço Fitness",
-        "Piscinas Adulto e Infantil",
-        "Espaço Gourmet",
-        "Wine Cave",
-        "Salão de Festas",
-        "Playground Descoberto",
-        "Espaço Kids/Teen",
-        "Bicicletário",
-        "Área de Convivência",
-        "Espaço Delivery",
-        "Portaria 24h"
-    ],
+    "amenidades": {
+        "Espaço Fitness": "Equipped with treadmills, bikes, weight stations, and a variety of weights and mats to meet all your physical exercise needs.",
+        "Piscinas Adulto e Infantil": "An ideal space to relax and cool off, with dedicated areas for both adults and children, ensuring fun for the whole family.",
+        "Espaço Gourmet": "Perfect for gathering friends and family, equipped with a gas grill, cooktop, and refrigerator, providing a sophisticated and functional environment.",
+        "Wine Cave": "An exclusive space for wine lovers, with a cellar for storage and a cozy environment for tasting.",
+        "Salão de Festas": "A spacious and well-decorated area, ideal for celebrating special occasions, equipped with a support kitchen and open terrace.",
+        "Playground Descoberto": "A safe and fun area for children to play outdoors, encouraging playful and social activities.",
+        "Espaço Kids/Teen": "A dedicated area for young people, with games and recreational activities that promote social interaction and entertainment.",
+        "Bicicletário": "A space for safe bicycle storage, encouraging a healthy and sustainable lifestyle.",
+        "Área de Convivência": "Elegant entrance hall and lobby, providing a welcoming and comfortable environment for receiving guests.",
+        "Espaço Delivery": "A specific area for receiving packages, ensuring convenience and security in receiving deliveries and correspondence.",
+        "Portaria 24h": "Equipped for access control and security, ensuring tranquility and protection for residents."
+    },
     "apartamentos_detalhados": [
         {
             "nome": "Apartamento Final 01",
