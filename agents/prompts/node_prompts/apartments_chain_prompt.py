@@ -58,6 +58,9 @@ apartments_chain_prompt = ChatPromptTemplate.from_messages([
     17.Try to keep responses under 35 words.
     18.Avoid saying the user's name.
     19.
+<<<<<<< HEAD
+>>>>>>> 9c431cfad6c0cfdcf7f9e206ca17646b9a289f42
+=======
 >>>>>>> 9c431cfad6c0cfdcf7f9e206ca17646b9a289f42
     """),
 ])
