@@ -20,9 +20,15 @@ def text_to_speech(text,audioTeste = './Audios/waitSound(0)',similarity_threshol
         df = pd.read_csv(CSV_FILEPATH)
 
     for index, row in df.iterrows():
+        max_similarity = 0
         similarity = calculate_similarity(text, row['text'])
-        if similarity >= similarity_threshold:
+        if similarity > max_similarity:
+            max_similarity = similarity
+            texto_max = row['text']
+        if max_similarity >= similarity_threshold:
+            print(f"Maior similaridade e: {max_similarity} com o texto: '{texto_max}' vs o original '{text}'")
             return row['file_path']
+    print(f"Maior similaridade e: {max_similarity} com o texto: '{texto_max}'")
     play_audio_thread(audioTeste)
     return generate_text_to_speech(text)
 
@@ -73,5 +79,5 @@ def save_audio_and_text(output, text, similarity_threshold = 1):
             return
 def calculate_similarity(text1, text2):
     similarity = fuzz.ratio(text1, text2)/100
-    print(f"Similarity between '{text1}' and '{text2}': {similarity}")
+    #print(f"Similarity between '{text1}' and '{text2}': {similarity}")
     return similarity  
