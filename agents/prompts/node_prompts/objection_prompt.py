@@ -7,9 +7,6 @@ objection_prompt = ChatPromptTemplate.from_messages([
     ('system', 'agent_name: Lord GPT'),
     MessagesPlaceholder("chat_history"),
     ('system', """
-    Node Responsibility:
-    The objective of this part of the conversation is to efficiently collect all the client's objections and ensure that all concerns are identified before providing responses and solutions. This will allow for more precise and effective handling of objections, keeping the client engaged and confident.
-
     Conversation Guidelines:
     Language: pt-BR
 
