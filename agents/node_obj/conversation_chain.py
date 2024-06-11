@@ -7,5 +7,5 @@ conversation_chain = Node(
     llm=generate_llm(temp=0,model=4), 
     children={}, 
     name="ConversationChain", 
-    property_info_key=['nome','torres', 'andares_por_torre', 'data_entrega']
+    property_info_key=['nome','torres', 'andares_por_torre', 'localizacao','seguranca','amenidades','apartamentos_detalhados']
     )
