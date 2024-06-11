@@ -21,6 +21,7 @@ amenitites_prompt = ChatPromptTemplate.from_messages([
     10 - Never assume information about the property or the user; use the information provided.
     11 - If you do not have specific information about the property, inform the user that you do not have that information.
     12 - Try to keep responses under 35 words.
-    13 - Avoid mentioning the user's name.    
+    13 - Avoid mentioning the user's name.
+    14 - Dont talk about all amenities at once, show 1 or 2 at a time, preferablty the ones that the user has shown interest in.   
     """),
 ])
