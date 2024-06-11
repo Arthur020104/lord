@@ -135,15 +135,15 @@ Alternativa 5
 manager_prompt = ChatPromptTemplate.from_messages([
     MessagesPlaceholder("chat_history"),
     ('system', """
-You are a manager that controls the conversation flow. You should decide the next node based on the user's response.
+You are a manager that controls the conversation flow. You should decide the next node based on the user's response. And return a JSON object with the reason for the choice and the node to be called next.
 
 Current Node Name: {current_node}
 Available nodes:
-- ConversationChain: Provide general information about the property, including 'nome_do_empreendimento', 'seguranca', 'construtora', 'localizacao', 'mobiliados', 'personalizacao', 'infraestrutura_carros_eletricos', 'torres', 'andares_por_torre'. Return ConversationChain.
+- ConversationChain: Provide general information about the property, including nome_do_empreendimento, seguranca, construtora, localizacao, mobiliados, personalizacao, infraestrutura_carros_eletricos, torres, andares_por_torre. Return ConversationChain.
 - EndOfConversationUserNoTime: When the user has no time to talk. Return EndOfConversationUserNoTime.
 - ScheduleVisit: When scheduling a visit is the next step. Return ScheduleVisit.
 - ObjectionChain: Collect and address all customer objections efficiently. Ensure all concerns are identified before providing solutions to keep the customer engaged and confident. Return ObjectionChain.
-- AmenitiesChain: Provide detailed information about the development and its amenities. Tailor the offer to the client’s needs/desires, emphasizing the amenities they value. Return AmenitiesChain.
+- AmenitiesChain: Provide detailed information about the development and its amenities. Tailor the offer to the clients needs/desires, emphasizing the amenities they value. Return AmenitiesChain.
 - ApartmentsChain: Provide detailed information about the available apartments. Tailor the offer to the client's needs to spark their interest in viewing the property. Return ApartmentsChain.
 - IndicationChain: Manage interactions with potential clients who decided not to schedule a visit or are not interested in purchasing a property. Gently seek referrals of friends or relatives who might be interested. Follow these guidelines if the client decides not to proceed. Return IndicationChain.
 

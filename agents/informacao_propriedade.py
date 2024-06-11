@@ -20,7 +20,7 @@ empreendimento = {
             "padaria": "Padaria Mix Pão a 3 minutos a pé"
         }
     },
-    "data_entrega": "Abril de 2027 com tolerância de 3 meses para o habite-se",
+    "data_entrega": "Abril de 2027",
     "torres": 1,
     "andares_por_torre": 15,
     "apartamentos": {

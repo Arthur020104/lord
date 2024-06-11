@@ -8,6 +8,10 @@ from agents.node_obj.schedule_visit_chain import node_schedule_visit
 from agents.node_obj.end_of_conversation_user_no_time import end_of_conversation_user_no_time
 from agents.node_obj.conversation_chain import conversation_chain
 from agents.node_obj.start_conversation_chain import start_conversation_chain
+from agents.node_obj.amenities_chain import amenities_chain
+from agents.node_obj.apartments_chain import apartments_chain
+from agents.node_obj.indication_chain import indication_chain
+from agents.node_obj.objection_chain import objection_chain
 from agents.LLM import generate_llm
 
 # Initialize memory
@@ -35,7 +39,11 @@ all_nodes = {
     'StartConversationChain': start_conversation_chain,
     "ConversationChain": conversation_chain,
     "ScheduleVisit": node_schedule_visit,
-    "EndOfConversationUserNoTime": end_of_conversation_user_no_time
+    "EndOfConversationUserNoTime": end_of_conversation_user_no_time,
+    "AmenitiesChain": amenities_chain,
+    "ApartmentsChain": apartments_chain,
+    "IndicationChain": indication_chain,
+    "ObjectionChain": objection_chain,
 }
 
 # Add children to nodes
@@ -50,7 +58,7 @@ def call_current_node():
     global node, dict_base, last_output
     try:
         dict_base['chat_history'] = memory.get_memory_tuple()
-        dict_base['property_info'] = node.filter_property_info(property_info)
+        dict_base['property_info'] = node.filter_property_info(empreendimento)
         response = node.call_chain(dict_base)
         last_output = response['text']
         return response
@@ -75,7 +83,7 @@ def process_user_input(user_input):
                 node_called = node_called
                 data_dict = json.loads(node_called)
                 node_called = data_dict['node']
-                print(f"Node called: {node_called}")
+                print(f"Node called: {node_called}, why called: {data_dict['answer']}")
                 if node_called != "Não existe":
                     node = node.get_children()[node_called]
                 break
