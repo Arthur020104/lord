@@ -3,6 +3,8 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import random
 from stt.audio import play_audio, play_audio_thread
@@ -28,31 +30,35 @@ def setup_whatsapp():
 
     return driver
 
-def read_last_message(driver):
-
-    # Coleta a última mensagem recebida
-    # Seleciona o contato mais recente
-    recent_contact = driver.find_element(By.XPATH, '//*[@id="pane-side"]/div[1]/div/div/div[1]')
-    recent_contact.click()
-
-    # Espera o campo de mensagem estar disponível
+def select_contact(driver):
+    search_box = WebDriverWait(driver, 30).until(
+        EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
+    )
+    search_box.click()
+    search_box.send_keys("Marquinho")
+    search_box.send_keys(Keys.ENTER)
     time.sleep(2)
 
-    # Envia a mensagem
-    message_box = driver.find_element(By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]')
-    message_box.send_keys('Olá, esta é uma mensagem automática.')
-    message_box.send_keys(Keys.ENTER)
-
-    #if messages:
-    #    last_message = messages[-1].text
-    #    return last_message
-    return None
+def read_last_message(driver):
+    try:
+        messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in")]')
+        last_message = messages[-1].find_element(By.XPATH, './/span[@class="_11JPr selectable-text copyable-text"]').text
+        return last_message
+    except Exception as e:
+        print(f"Error reading last message: {e}")
+        return None
 
 def send_message(driver, message):
-    # Envia a mensagem
-    message_box = driver.find_element(By.CSS_SELECTOR, 'div._3uMse')
-    message_box.send_keys(message + Keys.ENTER)
-
+    try:
+        message_box = WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]'))
+        )
+        message_box.click()
+        message_box.send_keys(message)
+        time.sleep(0.5)
+        message_box.send_keys(Keys.ENTER)
+    except Exception as e:
+        print(f"Error sending message: {e}")
 
 def log_time_taken(task_name, start_time):
     end_time = time.time()
@@ -62,22 +68,24 @@ def log_time_taken(task_name, start_time):
 
 def main_loop():
     driver = setup_whatsapp()
+    select_contact(driver)
     try:
         while True:
             start_time = time.time()
-            
-            # Ler a última mensagem
+
+            # Obter resposta da LLM
+            response = call_current_node()['text']
+
+            # Enviar resposta
+            send_message(driver,response)
+
+            time.sleep(5)
+
+            # Ler input do Usuario
             user_input = read_last_message(driver)
-            if user_input:
-                print("User:", user_input)
-                
-                # Obter resposta da LLM
-                response = call_current_node()['text']
-                log_time_taken("LLM response retrieval", start_time)
-                print("LLM:", response)
-                
-                # Enviar resposta no WhatsApp
-                send_message(driver, response)
+
+            # Processar input
+            process_user_input(user_input)
             
             time.sleep(5)  # Aguarda 5 segundos antes de verificar novas mensagens
     except KeyboardInterrupt:
