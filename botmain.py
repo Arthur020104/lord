@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 import random
 from stt.audio import play_audio, play_audio_thread
 from stt.speeach_recog import escutar_e_transcrever
@@ -36,14 +35,21 @@ def select_contact(driver):
     )
     search_box.click()
     search_box.send_keys("Marquinho")
+    time.sleep(0.5)
     search_box.send_keys(Keys.ENTER)
     time.sleep(2)
 
-def read_last_message(driver):
+def read_last_message(driver, last_message=None):
     try:
-        messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in")]')
-        last_message = messages[-1].find_element(By.XPATH, './/span[@class="_11JPr selectable-text copyable-text"]').text
-        return last_message
+        while True:
+            messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
+            if messages:
+                new_message = messages[-1].find_element(By.XPATH, './/span[@data-testid="msg-text"]').text
+
+                if new_message != last_message:
+                    return new_message
+
+            time.sleep(3)  # Aguarda 3 segundos antes de verificar novamente
     except Exception as e:
         print(f"Error reading last message: {e}")
         return None
@@ -69,6 +75,8 @@ def log_time_taken(task_name, start_time):
 def main_loop():
     driver = setup_whatsapp()
     select_contact(driver)
+
+    last_message = None
     try:
         while True:
             start_time = time.time()
@@ -82,7 +90,8 @@ def main_loop():
             time.sleep(5)
 
             # Ler input do Usuario
-            user_input = read_last_message(driver)
+            user_input = read_last_message(driver, last_message)
+            last_message = user_input
 
             # Processar input
             process_user_input(user_input)
