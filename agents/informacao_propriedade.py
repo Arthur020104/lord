@@ -6,7 +6,7 @@ empreendimento = {
         "confiabilidade": "A COBO Empreendimentos é reconhecida pela entrega pontual e pela qualidade de construção reforçada por seus projetos bem-sucedidos e satisfação dos clientes."
     },
     "localizacao": {
-        "endereco": "Rua Antônio Salviano de Rezende 877, Bairro Santa Mônica, Uberlândia-MG",
+        "endereco": "Rua Antônio Salviano de Rezende 877 (antiga 19), Bairro Santa Mônica, Uberlândia-MG, perto a sergismundo pereira",
         "proximidades": {
             "supermercado": "Carrefour a 5 minutos de carro",
             "educacao": "Centro Educacional SESC a 7 minutos de distância",
@@ -157,5 +157,35 @@ empreendimento = {
             "diferenciais": ["Sala em dois ambientes", "Cozinha americana", "Espaçoso terraço descoberto", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
             "valor": 803097.00
         }
-    ]
+    ],
+    "Resumo_en": """Vivaz Santa Mônica by COBO Empreendimentos offers a modern residential experience in Uberlândia-MG.
+    The project features one 15-story tower with 55 apartments, ready by April 2027.
+    There are 2 and 3-bedroom units, all equipped with gourmet verandas, air-conditioning prep, and electric car infrastructure.
+    The location is prime(Santa Mônica), with essential amenities like Carrefour, SESC, Parque do Sabiá, UFU, and more within a 12-minute radius.
+    High security and a variety of amenities, including pools, fitness, gourmet space, wine cave, and kids' areas, ensure comfort and convenience for residents.
+    Pricing ranges from approximately R$616,557.50 to R$901,384.90.""",
+    
+    "Resumo_en0" : """
+Vivaz Santa Mônica Overview
+
+Location: Rua Antônio Salviano de Rezende 877, Bairro Santa Mônica, UberlândiaMG.
+ Nearby: Carrefour (5 min), SESC (7 min), Parque do Sabiá (10 min), UFU (12 min), Shopping Uberlândia (8 min), Hospital Santa Genoveva (6 min), Escola Estadual Segismundo Pereira (5 min walk).
+
+Construction:
+ Builder: COBO Empreendimentos, known for quality and timely delivery.
+ Completion: April 2027.
+
+Structure:
+ Towers: 1, with 15 floors.
+ Apartments: 55 (5 per floor).
+ Types: 2bed (79.55m², 2 suites) and 3bed (90.7390.88m², 1 suite).
+
+Features:
+ Amenities: Fitness space, pools, gourmet area, wine cave, party room, playground, kids/teen area, bike storage, delivery area.
+ Security: CCTV, 24h security, electronic gates, access control.
+ Sustainability: Electric car charging prep, home automation prep.
+ Customization: Choice of finishes.
+
+Prices: 2bed from R$616,557.50; 3bed from R$680,691.20; Garden apartments from R$791,207.00 to R$901,384.90.
+    """
 }
