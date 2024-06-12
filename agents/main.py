@@ -57,6 +57,7 @@ node = start_conversation_chain
 def call_current_node():
     global node, dict_base, last_output
     try:
+        print(f"Current node: {node.get_name()}")
         dict_base['chat_history'] = memory.get_memory_tuple()
         dict_base['property_info'] = node.filter_property_info(empreendimento)
         response = node.call_chain(dict_base)
