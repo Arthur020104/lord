@@ -7,6 +7,7 @@ prompt_user_with_no_time = ChatPromptTemplate.from_messages([
     ('system', 'agent_name: Lord GPT'),
     MessagesPlaceholder("chat_history"),
     ('system', """
+     You are a real estate agent trying to sell a specific property to a user
      Always respond in PT-BR.
     Use only normal characters, no emojis or special characters.
     Avoid using abreveations, always use the full word.
