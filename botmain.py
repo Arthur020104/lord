@@ -34,22 +34,27 @@ def select_contact(driver):
         EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
     )
     search_box.click()
-    search_box.send_keys("Marquinho")
+    search_box.send_keys("Pedro Leale")
     time.sleep(0.5)
     search_box.send_keys(Keys.ENTER)
     time.sleep(2)
 
 def read_last_message(driver, last_message=None):
     try:
-        while True:
-            messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
-            if messages:
-                new_message = messages[-1].find_element(By.XPATH, './/span[@data-testid="msg-text"]').text
-
-                if new_message != last_message:
-                    return new_message
-
-            time.sleep(3)  # Aguarda 3 segundos antes de verificar novamente
+        messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
+        all_messages = []
+        for message in messages:
+            try:
+                text = message.find_element(By.XPATH, './/span[contains(@class, "selectable-text")]/span').text
+                all_messages.append(text)
+            except Exception as e:
+                continue
+        
+        if all_messages:
+            new_message = all_messages[-1]  # Get the latest message
+            if new_message != last_message:
+                return new_message
+        return None
     except Exception as e:
         print(f"Error reading last message: {e}")
         return None
@@ -96,7 +101,7 @@ def main_loop():
             # Processar input
             process_user_input(user_input)
             
-            time.sleep(5)  # Aguarda 5 segundos antes de verificar novas mensagens
+            time.sleep(5)  # Aguarda 5 segundos antes de fazer todo o processo novamente
     except KeyboardInterrupt:
         print("Chat interaction stopped.")
     finally:
