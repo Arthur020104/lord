@@ -6,7 +6,8 @@ empreendimento = {
         "confiabilidade": "A COBO Empreendimentos é reconhecida pela entrega pontual e pela qualidade de construção reforçada por seus projetos bem-sucedidos e satisfação dos clientes."
     },
     "localizacao": {
-        "endereco": "Rua Antônio Salviano de Rezende 877 (antiga 19), Bairro Santa Mônica, Uberlândia-MG, perto a sergismundo pereira",
+        "endereco": "Rua Antônio Salviano de Rezende, antigo nome da rua: dezenove, 877, Bairro Santa Mônica, Uberlândia-MG",
+        "referencia" : "Perto a Segismundo Pereira",
         "proximidades": {
             "supermercado": "Carrefour a 5 minutos de carro",
             "educacao": "Centro Educacional SESC a 7 minutos de distância",
@@ -168,7 +169,7 @@ empreendimento = {
     "Resumo_en0" : """
 Vivaz Santa Mônica Overview
 
-Location: Rua Antônio Salviano de Rezende 877, Bairro Santa Mônica, UberlândiaMG.
+Location: Rua Antônio Salviano de Rezende, old street name: nineteen, 877, Santa Mônica, Uberlândia-MG.
  Nearby: Carrefour (5 min), SESC (7 min), Parque do Sabiá (10 min), UFU (12 min), Shopping Uberlândia (8 min), Hospital Santa Genoveva (6 min), Escola Estadual Segismundo Pereira (5 min walk).
 
 Construction:
