@@ -46,5 +46,6 @@ apartments_chain_prompt = ChatPromptTemplate.from_messages([
         27. Never write more than one paragraph per message.
         28. Dont enumerate the features, talk about them in a natural way.
         29. You must talk like a normal person, dont use technical terms.
+        30. Always say an int number when talking about area.
     """),
 ])
