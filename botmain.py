@@ -18,7 +18,7 @@ def get_random_audio_file():
     return AUDIO_FILES[random.randint(0, len(AUDIO_FILES) - 1)]
 
 def setup_whatsapp():
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome() # Utilizando chrome e setando zipzop
     driver.get("https://web.whatsapp.com")
 
     # Espera o usuário escanear o QR Code
@@ -28,30 +28,31 @@ def setup_whatsapp():
     return driver
 
 def select_contact(driver, contact_name):
-    search_box = WebDriverWait(driver, 30).until(
+    search_box = WebDriverWait(driver, 30).until( # Entrando na search box
         EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
     )
-    search_box.click()
-    search_box.send_keys(contact_name)
+    search_box.click() # Clicando nela
+    search_box.send_keys(contact_name) # Digitando o nome do contato
     time.sleep(0.5)
-    search_box.send_keys(Keys.ENTER)
+    search_box.send_keys(Keys.ENTER) # Apertando Enter
     time.sleep(2)
 
 def read_last_message(driver):
     try:
+        # Pego mensagens que estao vindo...
         messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
         all_messages = []
         for message in messages:
             try:
                 message_type = message.get_attribute("class")
-                if "message-in" in message_type:  # Only consider incoming messages
+                if "message-in" in message_type:  # So pego mensagens que chegam
                     text = message.find_element(By.XPATH, './/span[contains(@class, "selectable-text")]/span').text
-                    all_messages.append(text)
+                    all_messages.append(text) # Coloco tudo em all_messages
             except Exception as e:
                 continue
         
         if all_messages:
-            new_message = all_messages[-1]  # Get the latest message
+            new_message = all_messages[-1]  # Pego a ultima mensagem
             return new_message
         return None
     except Exception as e:
@@ -61,12 +62,13 @@ def read_last_message(driver):
 def send_message(driver, message):
     try:
         message_box = WebDriverWait(driver, 30).until(
+            # Clicar no chat pra enviar mensagem
             EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]'))
         )
         message_box.click()
-        message_box.send_keys(message)
+        message_box.send_keys(message) # Mandar a mensagem que vem da LLM
         time.sleep(0.5)
-        message_box.send_keys(Keys.ENTER)
+        message_box.send_keys(Keys.ENTER) # Aperta Enter pra enviar
     except Exception as e:
         print(f"Error sending message: {e}")
 
@@ -86,7 +88,7 @@ def main_loop():
             # Ler a última mensagem
             user_input = read_last_message(driver)
             if user_input and user_input != last_message:
-                # Vendo o input
+                # Vendo o input que vem da messagem
                 print(f"O input para ser processado foi: {user_input}")
                 last_message = user_input
                 process_user_input(user_input)
