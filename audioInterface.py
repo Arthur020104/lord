@@ -7,7 +7,7 @@ from agents.main import call_current_node, process_user_input
 from tts.text_to_speach import text_to_speech
 
 # Constants
-AUDIO_FILES = [f'./Audios/waitSound ({i}).mp3' for i in range(3)]
+AUDIO_FILES = [f'./Audios/waitSound ({i}).mp3' for i in range(7)]
 
 def get_random_audio_file():
     return AUDIO_FILES[random.randint(0, len(AUDIO_FILES) - 1)]
