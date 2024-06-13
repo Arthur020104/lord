@@ -18,8 +18,6 @@ def get_random_audio_file():
     return AUDIO_FILES[random.randint(0, len(AUDIO_FILES) - 1)]
 
 def setup_whatsapp():
-    
-    # Inicializa o WebDriver com as opções e serviço configurados
     driver = webdriver.Chrome()
     driver.get("https://web.whatsapp.com")
 
@@ -29,31 +27,32 @@ def setup_whatsapp():
 
     return driver
 
-def select_contact(driver):
+def select_contact(driver, contact_name):
     search_box = WebDriverWait(driver, 30).until(
         EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
     )
     search_box.click()
-    search_box.send_keys("Pedro Leale")
+    search_box.send_keys(contact_name)
     time.sleep(0.5)
     search_box.send_keys(Keys.ENTER)
     time.sleep(2)
 
-def read_last_message(driver, last_message=None):
+def read_last_message(driver):
     try:
         messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
         all_messages = []
         for message in messages:
             try:
-                text = message.find_element(By.XPATH, './/span[contains(@class, "selectable-text")]/span').text
-                all_messages.append(text)
+                message_type = message.get_attribute("class")
+                if "message-in" in message_type:  # Only consider incoming messages
+                    text = message.find_element(By.XPATH, './/span[contains(@class, "selectable-text")]/span').text
+                    all_messages.append(text)
             except Exception as e:
                 continue
         
         if all_messages:
             new_message = all_messages[-1]  # Get the latest message
-            if new_message != last_message:
-                return new_message
+            return new_message
         return None
     except Exception as e:
         print(f"Error reading last message: {e}")
@@ -71,37 +70,32 @@ def send_message(driver, message):
     except Exception as e:
         print(f"Error sending message: {e}")
 
-def log_time_taken(task_name, start_time):
-    end_time = time.time()
-    time_taken = end_time - start_time
-    print(f"{task_name} took {time_taken:.2f} seconds.")
-    return end_time
-
 def main_loop():
     driver = setup_whatsapp()
-    select_contact(driver)
+    select_contact(driver, "Marquinho")
 
-    last_message = None
+    # Inicializa a última mensagem com a mensagem mais recente da conversa
+    last_message = read_last_message(driver)
+    print(f"Última mensagem inicializada como: {last_message}")
+
+    response = call_current_node()['text']
+    send_message(driver, response)
+
     try:
         while True:
-            start_time = time.time()
+            # Ler a última mensagem
+            user_input = read_last_message(driver)
+            if user_input and user_input != last_message:
+                # Vendo o input
+                print(f"O input para ser processado foi: {user_input}")
+                last_message = user_input
+                process_user_input(user_input)
 
-            # Obter resposta da LLM
-            response = call_current_node()['text']
-
-            # Enviar resposta
-            send_message(driver,response)
-
-            time.sleep(5)
-
-            # Ler input do Usuario
-            user_input = read_last_message(driver, last_message)
-            last_message = user_input
-
-            # Processar input
-            process_user_input(user_input)
+                # Chama a resposta denovo
+                response = call_current_node()['text']
+                send_message(driver, response)
             
-            time.sleep(5)  # Aguarda 5 segundos antes de fazer todo o processo novamente
+            time.sleep(1)  # Aguarda 1 segundo antes de verificar novamente
     except KeyboardInterrupt:
         print("Chat interaction stopped.")
     finally:
