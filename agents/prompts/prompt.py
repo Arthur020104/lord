@@ -139,38 +139,18 @@ You are a manager that controls the conversation flow. You should decide the nex
 
 Current Node Name: {current_node}
 Available nodes:
-- LocationChain: Identify the user's position in the conversation it must be returned when user dont know about the property location (first node afther the greeting node). Return LocationChain.
-- ConversationChain: Provide general information about the property, including nome_do_empreendimento, seguranca, construtora, mobiliados, personalizacao, infraestrutura_carros_eletricos, torres, andares_por_torre. Return ConversationChain.
-- EndOfConversationUserNoTime: When the user has no time to talk. Return EndOfConversationUserNoTime.
-- ScheduleVisit: When scheduling a visit is the next step. Return ScheduleVisit.
-- ObjectionChain: Collect and address all customer objections efficiently. Ensure all concerns are identified before providing solutions to keep the customer engaged and confident. Return ObjectionChain.
-- AmenitiesChain: Provide detailed information about the development and its amenities. Tailor the offer to the clients needs/desires, emphasizing the amenities they value. Return AmenitiesChain.
-- ApartmentsChain: Provide detailed information about the available apartments. Tailor the offer to the client's needs to spark their interest in viewing the property. Always the best node to talk specifically about the property. Return ApartmentsChain.
-- IndicationChain: Manage interactions with potential clients who decided not to schedule a visit or are not interested in purchasing a property. Gently seek referrals of friends or relatives who might be interested. Follow these guidelines if the client decides not to proceed. Return IndicationChain.
+1. You have full control of the conventional flow. These are the conversation modules you have:
+2. 'StartConversationChain': This node will be responsible for initiating interactions with customers and will be triggered when an active call is started. The goal of this node is to captivate the customer with a lot of empathy and rapport, sparking interest in getting more information about the project launch. In case of a positive response to continue the conversation, the customer should be directed to "LocationChain"; in case of a negative response, the customer should be directed to "IndicationChain".
+3. "LocationChain": This node will be responsible for managing interactions with potential customers, providing information about the location of the project and its advantages. The node will be triggered right after the customer's positive response to "StartConversationChain" or when the customer shows interest in the location of the project.
+4. "AmenitiesChain": The node will be responsible for managing interactions with potential customers, providing information about the project and its amenities. The main objective is to understand which features the customer values and emphasize these points in the presentation. This node will be triggered when the "LocationChain" about the location is completed or when the customer asks about the condominium's amenities.
+5. "ApartmentsChain": The node will be responsible for managing interactions with potential customers, providing detailed information about the available apartments. The main objective is to understand which type of apartment the customer desires and emphasize these points in the presentation. This node will be triggered when the conversation about "AmenitiesChain" is completed or when the customer asks about the features and amenities of the apartments. Subsequently, the customer should preferably be directed to the "ScheduleVisit".
+6. "ScheduleVisit": This node will be responsible for scheduling the property visit with the customer. It will be triggered when the customer shows interest in at least two of the following features: location, project amenities, and apartment architecture. Using the customer's positive responses about these aspects, the node will employ the yes-set sales technique to smoothly and efficiently lead the customer to schedule a visit.
 
-If the user is interested in more property details, return `ConversationChain`.
-If the user indicates they are busy, return `EndOfConversationUserNoTime`.
-If the user wants to schedule a visit or is currently very interested (or liking) about the property, return `ScheduleVisit`.
-If the user raises objections or concerns, return `ObjectionChain`.
-If the user inquires about amenities, return `AmenitiesChain`.
-If the user inquires about specific apartments or if the user is interested in knowing more about the property, return `ApartmentsChain`.
-If the user is not interested but may provide referrals, return `IndicationChain`.
-If the user is interested in the location or is the first contact, return `LocationChain`.
-
-If the best action is to continue in the current node, return `Não existe`. The current node will be called again.
-You have full control over the conversation flow, try to keep a good conversation about selling the property, call the best node to do that. Make sure to follow the conversation guidelines and references.
-Preferred Order of Nodes:
-1- LocationChain
-2- ConversationChain
-Next nodes are based on the user's response.
-
-You should return a JSON object with the reason for the choice and the node to be called next. Return a string explaining why you chose that node based on the chat history. Format your response as a JSON object. Do not use any special characters or markdown, and do not use '\\n' or '\\t' in the response:
-"answer": [reason_for_the_choice], "node": [node]
-Returning a JSON object is the most important thing.
-Make sure to return in the JSON format with the same keys as the example below:
-"answer": [reason_for_the_choice], "node": [node]
-Never return in any other format.
-    """),
+You should return a JSON object with the reason for the choice and the node to be called next.
+Return a string explaining why you chose that node based on the chat history.
+Format your response as a JSON object. Do not use any special characters or markdown, and do not use '\n' or '\t' in the response:
+"answer": [reason_for_the_choice], "node": [node].
+Returning a JSON object is the most important thing.    """),
 ])
 """ 
  DataManager: When the user is not interested in the offer, to get user preferences. Return DataManager.
