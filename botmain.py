@@ -72,13 +72,21 @@ def send_message(driver, message):
     except Exception as e:
         print(f"Error sending message: {e}")
 
+
+# O que isso faz: A função main_loop() roda até ctrl+c ser ativado ou um erro acontecer, ela entra no whatsapp_web
+# espera a confirmação do QR code, e então você tem que dar enter no console, ela vai digitar o nome do contact
+# na caixa de busca e então apertar enter, ela faz uma chamada para a LLM, e manda a resposta inicial, então
+# coloca as mensagens em uma lista, e pega apenas a ultima para mandar para a LLM e ir resolvendo essa bomba.
+
+
+
 def main_loop():
     driver = setup_whatsapp()
     select_contact(driver, "Marquinho")
 
     # Inicializa a última mensagem com a mensagem mais recente da conversa
     last_message = read_last_message(driver)
-    print(f"Última mensagem inicializada como: {last_message}")
+    print(f"Última mensagem inicializada como: {last_message}") # Printando aqui so pra deixar claro o que ta rolando
 
     response = call_current_node()['text']
     send_message(driver, response)
@@ -87,7 +95,9 @@ def main_loop():
         while True:
             # Ler a última mensagem
             user_input = read_last_message(driver)
-            if user_input and user_input != last_message:
+            if user_input and user_input != last_message: # Isso daqui eu preciso mudar, ja que o cliente pode responder Sim,
+                # sim e ainda seria uma mensagem nova.
+
                 # Vendo o input que vem da messagem
                 print(f"O input para ser processado foi: {user_input}")
                 last_message = user_input
@@ -99,7 +109,7 @@ def main_loop():
             
             time.sleep(1)  # Aguarda 1 segundo antes de verificar novamente
     except KeyboardInterrupt:
-        print("Chat interaction stopped.")
+        print("Chat interaction stopped.") # Usa Ctrl + C pra cancelar interação do bot
     finally:
         driver.quit()
 
