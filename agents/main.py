@@ -12,6 +12,7 @@ from agents.node_obj.amenities_chain import amenities_chain
 from agents.node_obj.apartments_chain import apartments_chain
 from agents.node_obj.indication_chain import indication_chain
 from agents.node_obj.objection_chain import objection_chain
+from agents.node_obj.location_chain import location_chain
 from agents.LLM import generate_llm
 
 # Initialize memory
@@ -44,6 +45,7 @@ all_nodes = {
     "ApartmentsChain": apartments_chain,
     "IndicationChain": indication_chain,
     "ObjectionChain": objection_chain,
+    "LocationChain": location_chain,
 }
 
 # Add children to nodes
