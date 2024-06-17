@@ -35,27 +35,43 @@ def start_new_conversation(driver, contact_number):
     contact_input.send_keys(Keys.ENTER)
     time.sleep(2)
 
-def read_last_message(driver): # Tenho que mexer nesses try e exception, perhaps.
+def read_last_message(driver):
     try:
-        # Pego mensagens que estao vindo...
+        # Pego mensagens que estão vindo...
         messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
         all_messages = []
         for message in messages:
             try:
                 message_type = message.get_attribute("class")
-                if "message-in" in message_type:  # So pego mensagens que chegam
+                if "message-in" in message_type:  # Só pego mensagens que chegam
                     text = message.find_element(By.XPATH, './/span[contains(@class, "selectable-text")]/span').text
-                    all_messages.append(text) # Coloco tudo em all_messages
+                    all_messages.append(text)  # Coloco tudo em all_messages
             except Exception as e:
                 continue
         
         if all_messages:
-            new_message = all_messages[-1]  # Pego a ultima mensagem
+            new_message = all_messages[-1]  # Pego a última mensagem
+            print(f"New_Message: {new_message}")
+            print(all_messages)  # Printo todas as mensagens só para ver como funciona...
+
+            # Contar quantas vezes a nova mensagem é repetida consecutivamente no final da lista
+            consecutive_count = 0
+            for msg in reversed(all_messages[:-1]):
+                if msg == new_message:
+                    consecutive_count += 1
+                else:
+                    break
+            
+            if consecutive_count > 0:
+                new_message += '!' * consecutive_count # Pra que serve: Ele checa se a mensagem é igual para ver se uma mensagem
+                # nova é adicionada, porém, é possivel que o usuario digite sim, sim, e sejam mensagens diferentes, então se
+                # as mensagens forem consecutivas e no final eu vou adicionando ! para diferenciar elas, é gambiarra mas funciona ok!
             return new_message
         return None
     except Exception as e:
         print(f"Error reading last message: {e}")
         return None
+    
 
 def send_message(driver, message):
     try:
@@ -78,7 +94,7 @@ def send_message(driver, message):
 
 def main_loop():
     driver = setup_whatsapp()
-    start_new_conversation(driver, "+553496724123")  # Adicione o número de telefone aqui
+    start_new_conversation(driver, "+553492631397")  # Adicione o número de telefone aqui
 
     # Inicializa a última mensagem com a mensagem mais recente da conversa
     last_message = read_last_message(driver)
