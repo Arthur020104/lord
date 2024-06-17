@@ -167,7 +167,11 @@ Current Node Name: {current_node}
 
 10. "ObjectionChain": 
 
-This should accurately reflect your original text in English.   """),
+You should return a JSON object with the reason for the choice and the node to be called next.
+Return a string explaining why you chose that node based on the chat history.
+Format your response as a JSON object. Do not use any special characters or markdown, and do not use '\n' or '\t' in the response:
+"answer": [reason_for_the_choice], "node": [node].
+Returning a JSON object is the most important thing.  """),
 ])
 """ 
  DataManager: When the user is not interested in the offer, to get user preferences. Return DataManager.
