@@ -138,19 +138,36 @@ manager_prompt = ChatPromptTemplate.from_messages([
 You are a manager that controls the conversation flow. You should decide the next node based on the user's response. And return a JSON object with the reason for the choice and the node to be called next.
 
 Current Node Name: {current_node}
-Available nodes:
-1. You have full control of the conventional flow. These are the conversation modules you have:
-2. 'StartConversationChain': This node will be responsible for initiating interactions with customers and will be triggered when an active call is started. The goal of this node is to captivate the customer with a lot of empathy and rapport, sparking interest in getting more information about the project launch. In case of a positive response to continue the conversation, the customer should be directed to "LocationChain"; in case of a negative response, the customer should be directed to "IndicationChain".
-3. "LocationChain": This node will be responsible for managing interactions with potential customers, providing information about the location of the project and its advantages. The node will be triggered right after the customer's positive response to "StartConversationChain" or when the customer shows interest in the location of the project.
-4. "AmenitiesChain": The node will be responsible for managing interactions with potential customers, providing information about the project and its amenities. The main objective is to understand which features the customer values and emphasize these points in the presentation. This node will be triggered when the "LocationChain" about the location is completed or when the customer asks about the condominium's amenities.
-5. "ApartmentsChain": The node will be responsible for managing interactions with potential customers, providing detailed information about the available apartments. The main objective is to understand which type of apartment the customer desires and emphasize these points in the presentation. This node will be triggered when the conversation about "AmenitiesChain" is completed or when the customer asks about the features and amenities of the apartments. Subsequently, the customer should preferably be directed to the "ScheduleVisit".
-6. "ScheduleVisit": This node will be responsible for scheduling the property visit with the customer. It will be triggered when the customer shows interest in at least two of the following features: location, project amenities, and apartment architecture. Using the customer's positive responses about these aspects, the node will employ the yes-set sales technique to smoothly and efficiently lead the customer to schedule a visit.
 
-You should return a JSON object with the reason for the choice and the node to be called next.
-Return a string explaining why you chose that node based on the chat history.
-Format your response as a JSON object. Do not use any special characters or markdown, and do not use '\n' or '\t' in the response:
-"answer": [reason_for_the_choice], "node": [node].
-Returning a JSON object is the most important thing.    """),
+1. You have full control of the conventional flow. These are the conversational modules available:
+
+2. 'StartConversationChain': This node will be responsible for initiating interactions with clients and will be triggered when an active call is started. The goal of this node is to captivate the client with a lot of empathy and rapport, sparking interest in obtaining more information about the launch of the project. In case of a positive response to continue the conversation, the client should be directed to "LocationChain"; in case of a negative response, the client should be directed to "IndicationChain".
+
+3. "LocationChain": This node will be responsible for managing interactions with potential clients, providing information about the project's location and its advantages. The node will be triggered right after the client's positive response to the “StartConversationChain” or when the client shows interest in the project's location.
+
+4. "AmenitiesChain": This node will be responsible for managing interactions with potential clients, providing information about the project and its amenities. The main goal is to understand which features the client values and to emphasize these points in the presentation. This node will be triggered when the “LocationChain” conversation about the location is concluded or when the client asks about the condominium's amenities.
+
+5. "ApartmentsChain": This node will be responsible for managing interactions with potential clients, providing detailed information about the available apartments. The main goal is to understand what type of apartment the client desires and to emphasize these points in the presentation. This node will be triggered when the conversation about "AmenitiesChain" is concluded or when the client asks about the apartments' features and amenities. Subsequently, the client should preferably be directed to "ScheduleVisit".
+
+6. "ScheduleVisit": This node will be responsible for scheduling a visit to the property with the client. It will be triggered when the client shows interest in at least two of the following characteristics: location, project features, and apartment architecture. Using the client's positive responses about these aspects, the node will employ the yes set sales technique to smoothly and efficiently lead the client to schedule a visit.
+
+7. "ConversationChain": 
+
+8. "EndOfConversationUserNoTime": 
+
+9. "IndicationChain": This node will be responsible for managing interactions with potential clients who decided not to schedule a visit or who are not interested in buying a property at this time. The main goal is to gently seek referrals of friends or relatives who might be interested in buying a property. If the client decides not to proceed, follow these guidelines: this node will be triggered under the following conditions: 
+   a. Negative Response in "StartConversationChain":
+      i. When the "StartConversationChain" node initiates interaction with the client and the client gives a negative response to continue the conversation, they are directed to the "IndicationChain".
+   b. After "ScheduleVisit" if the Client Decides not to Schedule the Visit:
+      i. If, during the "ScheduleVisit", the client shows initial interest in at least two characteristics (location, project features, and apartment architecture), but ultimately decides not to schedule the visit, they will be directed to the "IndicationChain".
+   c. During "ConversationChain" if the Client Shows No Interest:
+      i. At any point in the "ConversationChain", if the client indicates that they are not interested in buying a property at this time, they will be redirected to the "IndicationChain".
+   d. After "EndOfConversationUserNoTime":
+      i. If the conversation ends because the client said they do not have time at the moment ("EndOfConversationUserNoTime"), but there is a possibility they know someone interested, the client can be directed to the "IndicationChain".
+
+10. "ObjectionChain": 
+
+This should accurately reflect your original text in English.   """),
 ])
 """ 
  DataManager: When the user is not interested in the offer, to get user preferences. Return DataManager.
@@ -347,38 +364,38 @@ prompt_filter_response_ask = ChatPromptTemplate.from_messages([
 
                 The fields are as follows:
 
-                - **City**: str
+                - City: str
                 - The city where the person wants to live.
 
-                - **Property Type**: str
+                - Property Type: str
                 - Options: 'house', 'apartment', 'condominium'.
                 - The type of property that the person wants to live in.
 
-                - **Number of Rooms**: int
+                - Number of Rooms: int
                 - The number of rooms that the person wants in the property.
 
-                - **Number of Bathrooms**: int
+                - Number of Bathrooms: int
                 - The number of bathrooms that the person wants in the property.
 
-                - **Number of Suites**: int
+                - Number of Suites: int
                 - The number of suites that the person wants in the property.
 
-                - **Amenities**: List[str]
+                - Amenities: List[str]
                 - The amenities that the person wants in the property or condominium if it is one.
 
-                - **Location Neighborhood**: str
+                - Location Neighborhood: str
                 - The neighborhood where the person wants to live.
 
-                - **Number of Parking Spaces**: int
+                - Number of Parking Spaces: int
                 - The number of parking spaces that the person wants in the property.
 
-                - **Price Range Lower**: int
+                - Price Range Lower: int
                 - The lower limit of the price range. If only one value is provided, lower is equal to (base_price - 10%).
 
-                - **Price Range Upper**: int
+                - Price Range Upper: int
                 - The upper limit of the price range. If only one value is provided, upper is equal to (base_price + 10%).
 
-                - **User explicit say that he wants to search for property**: bool
+                - User explicit say that he wants to search for property: bool
                 - If the user wants to search for a property, they must explicitly say so. If the search is not explicit, the agent should assume that it is false.
 
                 Please ensure that each field is filled accurately according to the user's preferences.
