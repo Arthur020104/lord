@@ -1,24 +1,13 @@
-import os
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import random
-from stt.audio import play_audio, play_audio_thread
-from stt.speeach_recog import escutar_e_transcrever
 from agents.main import call_current_node, process_user_input
-from tts.text_to_speach import text_to_speech
-
-# Constants
-AUDIO_FILES = [f'./Audios/waitSound ({i}).mp3' for i in range(3)]
-
-def get_random_audio_file():
-    return AUDIO_FILES[random.randint(0, len(AUDIO_FILES) - 1)]
 
 def setup_whatsapp():
-    driver = webdriver.Chrome() # Utilizando chrome e setando zipzop
+    driver = webdriver.Chrome()  # Utilizando Chrome
     driver.get("https://web.whatsapp.com")
 
     # Espera o usuário escanear o QR Code
@@ -27,17 +16,26 @@ def setup_whatsapp():
 
     return driver
 
-def select_contact(driver, contact_name):
-    search_box = WebDriverWait(driver, 30).until( # Entrando na search box
+def start_new_conversation(driver, contact_number):
+    # Aqui eu procuro o botao de nova conversa
+    new_chat_button = WebDriverWait(driver, 30).until(
+        EC.presence_of_element_located((By.XPATH, '//div[@title="Nova conversa"]'))
+    )
+    #Clico nele
+    new_chat_button.click()
+    
+    # Procuro a caixa de inserir contato
+    contact_input = WebDriverWait(driver, 30).until(
         EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
     )
-    search_box.click() # Clicando nela
-    search_box.send_keys(contact_name) # Digitando o nome do contato
-    time.sleep(0.5)
-    search_box.send_keys(Keys.ENTER) # Apertando Enter
+    contact_input.click()
+    # Clico nela
+    contact_input.send_keys(contact_number)
+    time.sleep(1)
+    contact_input.send_keys(Keys.ENTER)
     time.sleep(2)
 
-def read_last_message(driver):
+def read_last_message(driver): # Tenho que mexer nesses try e exception, perhaps.
     try:
         # Pego mensagens que estao vindo...
         messages = driver.find_elements(By.XPATH, '//div[contains(@class, "message-in") or contains(@class, "message-out")]')
@@ -78,11 +76,9 @@ def send_message(driver, message):
 # na caixa de busca e então apertar enter, ela faz uma chamada para a LLM, e manda a resposta inicial, então
 # coloca as mensagens em uma lista, e pega apenas a ultima para mandar para a LLM e ir resolvendo essa bomba.
 
-
-
 def main_loop():
     driver = setup_whatsapp()
-    select_contact(driver, "Marquinho")
+    start_new_conversation(driver, "+553496724123")  # Adicione o número de telefone aqui
 
     # Inicializa a última mensagem com a mensagem mais recente da conversa
     last_message = read_last_message(driver)
