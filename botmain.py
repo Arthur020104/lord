@@ -9,8 +9,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from agents.main import call_current_node, process_user_input
 
-phone_number = "+553492631397" # Variavel global do numero de telefone
-
 def setup_whatsapp():
     driver = webdriver.Chrome()  # Utilizando Chrome
     driver.get("https://web.whatsapp.com")
@@ -128,7 +126,7 @@ def save_conversation(user_input, response, phone_number, data_resposta_user):
 # na caixa de busca e então apertar enter, ela faz uma chamada para a LLM, e manda a resposta inicial, então
 # coloca as mensagens em uma lista, e pega apenas a ultima para mandar para a LLM e ir resolvendo essa bomba.
 
-def main_loop():
+def main_loop(phone_number):
     driver = setup_whatsapp()
     start_new_conversation(driver, phone_number)  # Adicione o número de telefone aqui
 
@@ -166,4 +164,4 @@ def main_loop():
         driver.quit()
 
 if __name__ == "__main__":
-    main_loop()
+    main_loop(phone_number = "553492631397") # Setando o numero de telefone
