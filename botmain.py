@@ -1,10 +1,15 @@
 import time
+import json
+import os
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from agents.main import call_current_node, process_user_input
+
+phone_number = "+553492631397" # Variavel global do numero de telefone
 
 def setup_whatsapp():
     driver = webdriver.Chrome()  # Utilizando Chrome
@@ -86,6 +91,37 @@ def send_message(driver, message):
     except Exception as e:
         print(f"Error sending message: {e}")
 
+def save_conversation(user_input, response, phone_number, data_resposta_user):
+    # Cria a pasta 'conversas' se ela não existir
+    if not os.path.exists('conversas'):
+        os.makedirs('conversas')
+
+    # Define o nome do arquivo como o número de telefone
+    filename = os.path.join('conversas', f'{phone_number}.json')
+
+    # Carrega o JSON existente ou cria um novo se não existir
+    try:
+        with open(filename, 'r') as file:
+            conversas = json.load(file)
+    except FileNotFoundError:
+        conversas = []
+
+    # Formata a conversa atual
+    data_hora_atual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    conversa_atual = {
+        "User - Data e horario atual": data_resposta_user,
+        "User input": user_input,
+        "Lord - Data e horario atual": data_hora_atual,
+        "Response": response
+    }
+
+    # Adiciona a conversa atual à lista de conversas
+    conversas.append(conversa_atual)
+
+    # Salva a lista de conversas de volta no arquivo JSON
+    with open(filename, 'w') as file:
+        json.dump(conversas, file, ensure_ascii=False, indent=4)
+
 
 # O que isso faz: A função main_loop() roda até ctrl+c ser ativado ou um erro acontecer, ela entra no whatsapp_web
 # espera a confirmação do QR code, e então você tem que dar enter no console, ela vai digitar o nome do contact
@@ -94,7 +130,7 @@ def send_message(driver, message):
 
 def main_loop():
     driver = setup_whatsapp()
-    start_new_conversation(driver, "+553492631397")  # Adicione o número de telefone aqui
+    start_new_conversation(driver, phone_number)  # Adicione o número de telefone aqui
 
     # Inicializa a última mensagem com a mensagem mais recente da conversa
     last_message = read_last_message(driver)
@@ -112,12 +148,16 @@ def main_loop():
 
                 # Vendo o input que vem da messagem
                 print(f"O input para ser processado foi: {user_input}")
+                data_resposta_user = datetime.now().strftime('%Y-%m-%d %H:%M:%S') # Hora que usuario respondeu
                 last_message = user_input
                 process_user_input(user_input)
 
                 # Chama a resposta denovo
                 response = call_current_node()['text']
                 send_message(driver, response)
+
+                # Salva a conversa no arquivo JSON
+                save_conversation(user_input, response, phone_number, data_resposta_user)
             
             time.sleep(1)  # Aguarda 1 segundo antes de verificar novamente
     except KeyboardInterrupt:
