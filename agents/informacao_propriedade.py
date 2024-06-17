@@ -7,19 +7,25 @@ empreendimento = {
     },
     "localizacao": {
         "endereco": "Rua Antônio Salviano de Rezende, antigo nome da rua: dezenove, 877, Bairro Santa Mônica, Uberlândia-MG",
-        "referencia" : "Perto a Segismundo Pereira",
-        "proximidades": {
-            "supermercado": "Carrefour a 5 minutos de carro",
-            "educacao": "Centro Educacional SESC a 7 minutos de distância",
-            "lazer": "Parque do Sabiá a 10 minutos de carro",
-            "universidade": "Universidade Federal de Uberlândia (UFU) a 12 minutos",
-            "shopping": "Shopping Uberlândia a 8 minutos de carro",
-            "hospital": "Hospital Santa Genoveva a 6 minutos",
-            "escola": "Escola Estadual Segismundo Pereira a 5 minutos a pé",
-            "academia": "Academia Smart Fit a 7 minutos de distância",
-            "servicos_publicos": "Centro Administrativo Municipal a 10 minutos",
-            "padaria": "Padaria Mix Pão a 3 minutos a pé"
+        "Referencias": {
+            "Referencias primarias": {
+                1: "O Vivaz Santa Monica fica na antiga 19 entre a Segismundo e Ana Godoy.",
+                2: "Fica no centro do bairro a 5 quadras das agencias do Itau e Bradesco e 2 quadras do posto Ipiranga."
+            },
+            "Referencias secundarias": {
+                1: "Supermercado Carrefour: Apenas 5 minutos de carro, oferecendo fácil acesso às compras diárias.",
+                2: "Centro Educacional SESC: Apenas 7 minutos de distância, uma excelente opção para educação e atividades culturais.",
+                3: "Parque do Sabiá: A 10 minutos de carro, ideal para atividades ao ar livre como caminhadas, corridas e desfrutar de um ambiente verde.",
+                4: "Universidade Federal de Uberlândia (UFU): Localizada a 12 minutos, facilitando o acesso à educação superior de qualidade.",
+                5: "Shopping Uberlândia: A 8 minutos de carro, oferecendo uma ampla variedade de lojas, restaurantes, cinema e opções de entretenimento.",
+                6: "Hospital Santa Genoveva: A apenas 6 minutos, garantindo assistência médica rápida e eficiente em caso de necessidade.",
+                7: "Escola Estadual Segismundo Pereira: A 5 minutos a pé, oferecendo opções de ensino fundamental e médio bem próximas ao empreendimento.",
+                8: "Academia Smart Fit: Apenas 7 minutos de distância para quem busca manter uma rotina de exercícios físicos.",
+                9: "Centro Administrativo Municipal: A 10 minutos, facilitando o acesso a serviços públicos e administrativos.",
+                10: "Padaria Mix Pão: A 3 minutos a pé, ideal para compras rápidas de pães e outros itens de padaria."
+            }
         }
+
     },
     "data_entrega": "Abril de 2027",
     "torres": 1,
