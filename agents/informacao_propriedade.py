@@ -58,114 +58,123 @@ empreendimento = {
         "portoes_eletronicos": True,
         "controle_acesso": True
     },
-    "amenidades": {
-        "Espaço Fitness": "Equipped with treadmills, bikes, weight stations, and a variety of weights and mats to meet all your physical exercise needs.",
-        "Piscinas Adulto e Infantil": "An ideal space to relax and cool off, with dedicated areas for both adults and children, ensuring fun for the whole family.",
-        "Espaço Gourmet": "Perfect for gathering friends and family, equipped with a gas grill, cooktop, and refrigerator, providing a sophisticated and functional environment.",
-        "Wine Cave": "An exclusive space for wine lovers, with a cellar for storage and a cozy environment for tasting.",
-        "Salão de Festas": "A spacious and well-decorated area, ideal for celebrating special occasions, equipped with a support kitchen and open terrace.",
-        "Playground Descoberto": "A safe and fun area for children to play outdoors, encouraging playful and social activities.",
-        "Espaço Kids/Teen": "A dedicated area for young people, with games and recreational activities that promote social interaction and entertainment.",
-        "Bicicletário": "A space for safe bicycle storage, encouraging a healthy and sustainable lifestyle.",
-        "Área de Convivência": "Elegant entrance hall and lobby, providing a welcoming and comfortable environment for receiving guests.",
-        "Espaço Delivery": "A specific area for receiving packages, ensuring convenience and security in receiving deliveries and correspondence.",
-        "Portaria 24h": "Equipped for access control and security, ensuring tranquility and protection for residents."
+    "amenidades": 
+    {
+        
+            "Social": {
+                "Gourmet Space": "Perfect for gathering friends and family, equipped with a gas grill, cooktop, and refrigerator, providing a sophisticated and functional environment.",
+                "Wine Cellar": "An exclusive space for wine lovers, with a cellar for storage and a cozy environment for tasting.",
+                "Party Room": "A spacious and well-decorated area, ideal for celebrating special occasions, equipped with a support kitchen and open terrace.",
+                "Common Area": "Elegant entrance hall and lobby, providing a welcoming and comfortable environment for receiving guests."
+            },
+            "For Children": {
+                "Children's Pools": "An ideal space to relax and cool off, with dedicated areas for both adults and children, ensuring fun for the whole family.",
+                "Outdoor Playground": "A safe and fun area for children to play outdoors, encouraging playful and social activities.",
+                "Kids/Teen Space": "A dedicated area for young people, with games and recreational activities that promote social interaction and entertainment."
+            },
+            "Sports": {
+                "Fitness Space": "Equipped with treadmills, bikes, weight stations, and a variety of weights and mats to meet all your physical exercise needs.",
+                "Adult Pools": "An ideal space to relax and cool off, with dedicated areas for both adults and children, ensuring fun for the whole family.",
+                "Bike Rack": "A space for safe bicycle storage, encouraging a healthy and sustainable lifestyle."
+            },
+            "Security": {
+                "Delivery Area": "A specific area for receiving packages, ensuring convenience and security in receiving deliveries and correspondence.",
+                "24-hour Security": "Equipped for access control and security, ensuring tranquility and protection for residents."
+            }
     },
-    "apartamentos_detalhados": [
-        {
-            "nome": "Apartamento Final 01",
-            "metragem": 90.73,
-            "quartos": 3,
-            "suites": 1,
-            "vagas_garagem": 2,
-            "diferenciais": ["Sala ampla em dois ambientes", "Cozinha tradicional", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 687567.70
-        },
-        {
-            "nome": "Apartamento Final 02",
-            "metragem": 90.88,
-            "quartos": 3,
-            "suites": 1,
-            "vagas_garagem": 2,
-            "diferenciais": ["Cozinha americana integrada", "Sala em dois ambientes", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 680691.20
-        },
-        {
-            "nome": "Apartamento Final 03",
-            "metragem": 90.73,
-            "quartos": 3,
-            "suites": 1,
-            "vagas_garagem": 2,
-            "diferenciais": ["Cozinha americana", "Sala em dois ambientes", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 687567.70
-        },
-        {
-            "nome": "Apartamento Final 04",
-            "metragem": 79.55,
-            "quartos": 2,
-            "suites": 2,
-            "vagas_garagem": 2,
-            "diferenciais": ["Sala em dois ambientes", "Cozinha americana", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 616557.50
-        },
-        {
-            "nome": "Apartamento Final 05",
-            "metragem": 79.55,
-            "quartos": 2,
-            "suites": 2,
-            "vagas_garagem": 2,
-            "diferenciais": ["Sala em dois ambientes", "Cozinha americana", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 616557.50
-        }
-    ],
-    "apartamentos_garden": [
-        {
-            "nome": "Apartamento Garden Final 01",
-            "metragem": 116.44,
-            "quartos": 3,
-            "suites": 1,
-            "vagas_garagem": 2,
-            "diferenciais": ["Sala ampla em dois ambientes", "Cozinha tradicional", "Amplo terraço descoberto", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 882135.60
-        },
-        {
-            "nome": "Apartamento Garden Final 02",
-            "metragem": 119.01,
-            "quartos": 3,
-            "suites": 1,
-            "vagas_garagem": 2,
-            "diferenciais": ["Cozinha americana integrada", "Sala em dois ambientes", "Espaçoso terraço descoberto", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 901384.90
-        },
-        {
-            "nome": "Apartamento Garden Final 03",
-            "metragem": 104.30,
-            "quartos": 3,
-            "suites": 1,
-            "vagas_garagem": 2,
-            "diferenciais": ["Cozinha americana", "Sala em dois ambientes", "Terraço descoberto", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 791207.00
-        },
-        {
-            "nome": "Apartamento Garden Final 04",
-            "metragem": 104.98,
-            "quartos": 2,
-            "suites": 2,
-            "vagas_garagem": 2,
-            "diferenciais": ["Sala em dois ambientes", "Cozinha americana", "Grande terraço descoberto", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 803097.00
-        },
-        {
-            "nome": "Apartamento Garden Final 05",
-            "metragem": 104.98,
-            "quartos": 2,
-            "suites": 2,
-            "vagas_garagem": 2,
-            "diferenciais": ["Sala em dois ambientes", "Cozinha americana", "Espaçoso terraço descoberto", "Varanda gourmet com churrasqueira a carvão", "Lavabo", "Preparação para ar-condicionado na sala e quartos"],
-            "valor": 803097.00
-        }
-    ],
-    "Resumo_en": """Vivaz Santa Mônica by COBO Empreendimentos offers a modern residential experience in Uberlândia-MG.
+    "apartamentos_detalhados": 
+    {
+            "tipos": 
+            {
+            "Apartamento Final 01": {
+                "Metragem": 90.73,
+                "Quartos": 3,
+                "Suítes": 1,
+                "Vagas de garagem": 2,
+                "Diferenciais": [
+                    "Sala ampla em dois ambientes",
+                    "Cozinha tradicional",
+                    "Varanda gourmet com churrasqueira a carvão",
+                    "Lavabo",
+                    "Preparação para ar-condicionado na sala e quartos"
+                ],
+                "Valor": {
+                    "Entrada": "Entrada de 68 mil Reais",
+                    "Parcelado": "137 mil Reais parcelados até a entrega das chaves, com um fluxo financeiro adaptável para você"
+                }
+            },
+            "Apartamento Final 02": {
+                "Metragem": 90.88,
+                "Quartos": 3,
+                "Suítes": 1,
+                "Vagas de garagem": 2,
+                "Diferenciais": [
+                    "Cozinha americana integrada",
+                    "Sala em dois ambientes",
+                    "Varanda gourmet com churrasqueira a carvão",
+                    "Lavabo",
+                    "Preparação para ar-condicionado na sala e quartos"
+                ],
+                "Valor": {
+                    "Entrada": "Entrada de 68 mil Reais",
+                    "Parcelado": "136 mil Reais parcelados até a entrega das chaves, com um fluxo financeiro adaptável para você"
+                }
+            },
+            "Apartamento Final 03": {
+                "Metragem": 90.73,
+                "Quartos": 3,
+                "Suítes": 1,
+                "Vagas de garagem": 2,
+                "Diferenciais": [
+                    "Cozinha americana",
+                    "Sala em dois ambientes",
+                    "Varanda gourmet com churrasqueira a carvão",
+                    "Lavabo",
+                    "Preparação para ar-condicionado na sala e quartos"
+                ],
+                "Valor": {
+                    "Entrada": "Entrada de 68 mil Reais",
+                    "Parcelado": "137 mil Reais parcelados até a entrega das chaves, com um fluxo financeiro adaptável para você"
+                }
+            },
+            "Apartamento Final 04": {
+                "Metragem": 79.55,
+                "Quartos": 2,
+                "Suítes": 2,
+                "Vagas de garagem": 2,
+                "Diferenciais": [
+                    "Sala em dois ambientes",
+                    "Cozinha americana",
+                    "Varanda gourmet com churrasqueira a carvão",
+                    "Lavabo",
+                    "Preparação para ar-condicionado na sala e quartos"
+                ],
+                "Valor": {
+                    "Entrada": "Entrada de 62 mil Reais",
+                    "Parcelado": "123 mil Reais parcelados até a entrega das chaves, com um fluxo financeiro adaptável para você"
+                }
+            },
+            "Apartamento Final 05": {
+                "Metragem": 79.55,
+                "Quartos": 2,
+                "Suítes": 2,
+                "Vagas de garagem": 2,
+                "Diferenciais": [
+                    "Sala em dois ambientes",
+                    "Cozinha americana",
+                    "Varanda gourmet com churrasqueira a carvão",
+                    "Lavabo",
+                    "Preparação para ar-condicionado na sala e quartos"
+                ],
+                "Valor": {
+                    "Entrada": "Entrada de 62 mil Reais",
+                    "Parcelado": "123 mil Reais parcelados até a entrega das chaves, com um fluxo financeiro adaptável para você"
+                }
+            },
+        } 
+} 
+,
+    "Resumo_en": """Vivaz Santa Mônica by COBO Empreendimentos offers a modern residential experience in Santa Monica.
     The project features one 15-story tower with 55 apartments, ready by April 2027.
     There are 2 and 3-bedroom units, all equipped with gourmet verandas, air-conditioning prep, and electric car infrastructure.
     The location is prime(Santa Mônica), with essential amenities like Carrefour, SESC, Parque do Sabiá, UFU, and more within a 12-minute radius.
@@ -175,7 +184,7 @@ empreendimento = {
     "Resumo_en0" : """
 Vivaz Santa Mônica Overview
 
-Location: Rua Antônio Salviano de Rezende, old street name: nineteen, 877, Santa Mônica, Uberlândia-MG.
+Location: Rua Antônio Salviano de Rezende, old street name: nineteen, 877, Santa Mônica.
  Nearby: Carrefour (5 min), SESC (7 min), Parque do Sabiá (10 min), UFU (12 min), Shopping Uberlândia (8 min), Hospital Santa Genoveva (6 min), Escola Estadual Segismundo Pereira (5 min walk).
 
 Construction:
