@@ -1,33 +1,43 @@
-import time
-import json
-import os
-from datetime import datetime
+from flask import Flask, request, jsonify
+from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time
+import json
+import os
+from datetime import datetime
 from agents.main import call_current_node, process_user_input
 
-# Todo: Descobrir algum jeito de falar com varios ameegans, testar multithreading primeiro, em ultimo caso testar um aws
-# pq nao quero mexer com aws
+app = Flask(__name__)
 
+# Função para configurar e iniciar o WhatsApp Web
 def setup_whatsapp():
     driver = webdriver.Chrome()  # Utilizando Chrome
     driver.get("https://web.whatsapp.com")
 
-    # Espera o usuário escanear o QR Code e apertar Enter
-    input("Pressione Enter após escanear o QR Code e carregar o WhatsApp Web...")
-    time.sleep(5)
+    try:
+        # Espera que o botão de nova conversa esteja presente
+        WebDriverWait(driver, 60).until(
+            EC.presence_of_element_located((By.XPATH, '//div[@title="Nova conversa"]'))
+        )
+        print("WhatsApp Web carregado com sucesso.")
+    except Exception as e:
+        print("Erro ao carregar o WhatsApp Web:", e)
+        driver.quit()
+        return None
 
     return driver
 
+# Função para iniciar uma nova conversa no WhatsApp Web
 def start_new_conversation(driver, contact_number):
     # Aqui eu procuro o botao de nova conversa
     new_chat_button = WebDriverWait(driver, 30).until(
         EC.presence_of_element_located((By.XPATH, '//div[@title="Nova conversa"]'))
     )
-    #Clico nele
+    # Clico nele
     new_chat_button.click()
     
     # Procuro a caixa de inserir contato
@@ -41,6 +51,7 @@ def start_new_conversation(driver, contact_number):
     contact_input.send_keys(Keys.ENTER)
     time.sleep(2)
 
+# Função para ler a última mensagem recebida
 def read_last_message(driver):
     try:
         # Pego mensagens que estão vindo...
@@ -80,6 +91,7 @@ def read_last_message(driver):
         return None
     
 
+# Função para enviar uma mensagem
 def send_message(driver, message):
     try:
         message_box = WebDriverWait(driver, 30).until(
@@ -93,6 +105,7 @@ def send_message(driver, message):
     except Exception as e:
         print(f"Error sending message: {e}")
 
+# Função para salvar a conversa em um arquivo JSON
 def save_conversation(user_input, response, phone_number, data_resposta_user):
     # Cria a pasta 'conversas' se ela não existir
     if not os.path.exists('conversas'):
@@ -124,16 +137,14 @@ def save_conversation(user_input, response, phone_number, data_resposta_user):
     with open(filename, 'w') as file:
         json.dump(conversas, file, ensure_ascii=False, indent=4)
 
-
-# O que isso faz: A função main_loop() roda até ctrl+c ser ativado ou um erro acontecer, ela entra no whatsapp_web
+# O que isso faz: A função chat interaction() roda até ctrl+c ser ativado ou um erro acontecer, ela entra no whatsapp_web
 # espera a confirmação do QR code, e então você tem que dar enter no console, ela vai digitar o numero do contact
 # na caixa de busca e então apertar enter, ela faz uma chamada para a LLM, e manda a resposta inicial, então
 # coloca as mensagens em uma lista, e pega apenas a ultima para mandar para a LLM e ir resolvendo essa bomba.
-
-def main_loop(phone_number):
+def chat_interaction(phone_number):
     driver = setup_whatsapp()
     start_new_conversation(driver, phone_number)
-
+    
     # Inicializa a última mensagem com a mensagem mais recente da conversa, essa bomba aqui é pra não pegarmos mensagens
     # antigas...
     last_message = read_last_message(driver)
@@ -147,7 +158,6 @@ def main_loop(phone_number):
             # Ler a última mensagem
             user_input = read_last_message(driver)
             if user_input and user_input != last_message: 
-
                 # Vendo o input que vem da messagem
                 print(f"O input para ser processado foi: {user_input}")
                 data_resposta_user = datetime.now().strftime('%Y-%m-%d %H:%M:%S') # Hora que usuario respondeu
@@ -166,7 +176,14 @@ def main_loop(phone_number):
     except KeyboardInterrupt:
         print("Chat interaction stopped.") # Usa Ctrl + C pra cancelar interação do bot
     finally:
-        driver.quit() # Tenho menor ideia do que isso faz
+        driver.quit() # Finaliza o driver
+
+@app.route('/start_chat', methods=['POST'])
+def start_chat():
+    phone_number = request.json['phone_number']
+    thread = Thread(target=chat_interaction, args=(phone_number,))
+    thread.start()
+    return jsonify({"status": "Interação funcionou", "Telefone": phone_number}), 200
 
 if __name__ == "__main__":
-    main_loop(phone_number = "553492631397") # Setando o numero de telefone
+    app.run(debug=True, host='0.0.0.0', port=5000)
