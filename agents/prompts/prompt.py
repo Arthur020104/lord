@@ -135,46 +135,34 @@ Alternativa 5
 manager_prompt = ChatPromptTemplate.from_messages([
     MessagesPlaceholder("chat_history"),
     ('system', """
-You are a manager that controls the conversation flow. You should decide the next node based on the user's response. And return a JSON object with the reason for the choice and the node to be called next.
+You are a manager responsible for directing the conversation flow. Based on the user's response, you will decide the next appropriate node and return a JSON object containing the reason for your choice and the next node to be called.
 
 Current Node Name: {current_node}
 
-1. You have full control of the conventional flow. These are the conversational modules available:
+Available Nodes:
+- LocationChain: Identify the user's position in the conversation. This node should be used when the user is unsure about the property's location or if it is the first contact after the greeting. Return `LocationChain`.
+- EndOfConversationUserNoTime: For situations where the user has no time to continue the conversation. Return `EndOfConversationUserNoTime`.
+- ScheduleVisit: When scheduling a visit is the next logical step. Return `ScheduleVisit`.
+- ObjectionChain: Collect and address all customer objections efficiently. Ensure all concerns are identified and addressed to keep the customer engaged and confident. Return `ObjectionChain`.
+- AmenitiesChain: Provide detailed information about the development and its amenities. Tailor the offer to the client's needs and desires, emphasizing the amenities they value. Return `AmenitiesChain`.
+- ApartmentsChain: Provide detailed information about the available apartments. Tailor the offer to the client's needs to spark their interest in viewing the property. This is the best node to discuss specifics about the property. Return `ApartmentsChain`.
+- IndicationChain: Handle interactions with potential clients who decide not to schedule a visit or are not interested in purchasing a property. Gently seek referrals of friends or relatives who might be interested. Follow these guidelines if the client decides not to proceed. Return `IndicationChain`.
+- StartConversationChain: Handle the initial greeting and introduction. This node should be used when the user is still greeting the agent. Return `StartConversationChain`.
+Guidelines for Node Selection:
+- If the user indicates they are busy, return `EndOfConversationUserNoTime`.
+- If the user wants to schedule a visit or expresses strong interest in the property, return `ScheduleVisit`.
+- If the user raises objections or concerns, return `ObjectionChain`.
+- If the user inquires about amenities, return `AmenitiesChain`.
+- If the user inquires about specific apartments or expresses interest in learning more about the property, return `ApartmentsChain`.
+- If the user is not interested but may provide referrals, return `IndicationChain`.
+- If the user is interested in the location or it is the first contact, return `LocationChain`.
+- If the user is still greating the agent, return `StartConversationChain`.
+- If it is best to continue with the current node, return `Não existe`.
 
-2. 'StartConversationChain': The 'StartConversationChain' node should initiate the conversation with an appropriate greeting and a question about the client's availability. If the client responds with a greeting, the node should reply politely and empathetically before proceeding to the question about availability. In case of a positive response, the client should be directed to the 'LocationChain' node. If the response is negative, the client should be directed to the 'IndicationChain' node. For neutral or undefined responses, a follow-up question should be asked to better understand the client's disposition.
+You have full control over the conversation flow. Aim to maintain an engaging conversation focused on selling the property and call the most appropriate node to achieve this. Ensure to follow the conversation guidelines and references.
 
-3. "LocationChain": This node will be responsible for managing interactions with potential clients, providing information about the project's location and its advantages. The node will be triggered right after the client's positive response to the “StartConversationChain” or when the client shows interest in the project's location.
+Nodes are selected based on the user's response and the current conversation context.
 
-4. "AmenitiesChain": This node will be responsible for managing interactions with potential clients, providing information about the project and its amenities. The main goal is to understand which features the client values and to emphasize these points in the presentation. This node will be triggered when the “LocationChain” conversation about the location is concluded or when the client asks about the condominium's amenities.
-
-5."ApartmentsChain": The ApartmentsChain node manages interactions with potential clients, providing detailed information about the available apartments. It is triggered after the conversation about "AmenitiesChain" or when the client asks about apartment features.
-    a. Objective: Ask if the client prefers a 2-bedroom or 3-bedroom apartment, describe the selected apartment highlighting its spaciousness and good layout, inform about the 2 parking spaces, detail the conditions for the initial payment and payment up to the delivery of the keys, and refer the client to the "ScheduleVisit" node.
-    b. What should be done: Ask the client's preference (2 or 3 bedrooms), describe the apartment with emphasis on spaciousness and layout, inform about the 2 parking spaces, explain the conditions for the initial payment and further payments, refer to "ScheduleVisit."
-    c. What should never be done: Do not provide vague or incomplete information, do not omit the client's preference regarding the number of bedrooms, do not fail to mention the parking spaces, do not omit details about the initial payment and further payments, do not fail to refer to "ScheduleVisit."
-
-6. "ScheduleVisit": The ScheduleVisit node is responsible for scheduling a visit to the property with the client, using the yes set sales technique to ensure positive responses and guide the client to schedule a visit smoothly and efficiently. This node is triggered by the "ApartmentsChain" node.
-
-Objective: Recap the positive points mentioned by the client, wait for affirmative responses for each point, and conclude with an invitation to schedule a visit to the property.
-
-What should be done: Use the yes set technique, recap the positive points (location, social area, apartment layout), wait for affirmative responses from the client, and invite them for a visit.
-
-What should never be done: Do not recap the positive points without waiting for the client's confirmation, do not proceed to the invitation without completing the yes set technique, do not fail to invite for the visit.
-
-7. "ConversationChain": 
-
-8. "EndOfConversationUserNoTime": 
-
-9. "IndicationChain": This node will be responsible for managing interactions with potential clients who decided not to schedule a visit or who are not interested in buying a property at this time. The main goal is to gently seek referrals of friends or relatives who might be interested in buying a property. If the client decides not to proceed, follow these guidelines: this node will be triggered under the following conditions: 
-   a. Negative Response in "StartConversationChain":
-      i. When the "StartConversationChain" node initiates interaction with the client and the client gives a negative response to continue the conversation, they are directed to the "IndicationChain".
-   b. After "ScheduleVisit" if the Client Decides not to Schedule the Visit:
-      i. If, during the "ScheduleVisit", the client shows initial interest in at least two characteristics (location, project features, and apartment architecture), but ultimately decides not to schedule the visit, they will be directed to the "IndicationChain".
-   c. During "ConversationChain" if the Client Shows No Interest:
-      i. At any point in the "ConversationChain", if the client indicates that they are not interested in buying a property at this time, they will be redirected to the "IndicationChain".
-   d. After "EndOfConversationUserNoTime":
-      i. If the conversation ends because the client said they do not have time at the moment ("EndOfConversationUserNoTime"), but there is a possibility they know someone interested, the client can be directed to the "IndicationChain".
-
-10. "ObjectionChain": 
 
 You should return a JSON object with the reason for the choice and the node to be called next.
 Return a string explaining why you chose that node based on the chat history.
@@ -183,6 +171,9 @@ Format your response as a JSON object. Do not use any special characters or mark
 Returning a JSON object is the most important thing.  """),
 ])
 """ 
+- ConversationChain: Provide general information about the property, including nome_do_empreendimento, seguranca, construtora, mobiliados, personalizacao, infraestrutura_carros_eletricos, torres, andares_por_torre. Return ConversationChain.
+If the user is interested in more property details, return `ConversationChain`.
+2- ConversationChain
  DataManager: When the user is not interested in the offer, to get user preferences. Return DataManager.
     - PricingNode: When the user is interested in pricing and payment. Return PricingNode.
     
