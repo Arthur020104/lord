@@ -141,7 +141,7 @@ Current Node Name: {current_node}
 
 1. You have full control of the conventional flow. These are the conversational modules available:
 
-2. 'StartConversationChain': This node will be responsible for initiating interactions with clients and will be triggered when an active call is started. The goal of this node is to captivate the client with a lot of empathy and rapport, sparking interest in obtaining more information about the launch of the project. In case of a positive response to continue the conversation, the client should be directed to "LocationChain"; in case of a negative response, the client should be directed to "IndicationChain".
+2. 'StartConversationChain': The 'StartConversationChain' node should initiate the conversation with an appropriate greeting and a question about the client's availability. If the client responds with a greeting, the node should reply politely and empathetically before proceeding to the question about availability. In case of a positive response, the client should be directed to the 'LocationChain' node. If the response is negative, the client should be directed to the 'IndicationChain' node. For neutral or undefined responses, a follow-up question should be asked to better understand the client's disposition.
 
 3. "LocationChain": This node will be responsible for managing interactions with potential clients, providing information about the project's location and its advantages. The node will be triggered right after the client's positive response to the “StartConversationChain” or when the client shows interest in the project's location.
 
