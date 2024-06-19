@@ -3,7 +3,7 @@ import time
 import random
 from stt.audio import play_audio, play_audio_thread
 from stt.speeach_recog import escutar_e_transcrever
-from agents.main import call_current_node, process_user_input
+from lord.main import call_current_node, process_user_input
 from tts.text_to_speach import text_to_speech
 
 # Constants

@@ -1,5 +1,5 @@
 import streamlit as st
-from agents.main import call_current_node, process_user_input, delete_memory
+from lord.main import call_current_node, process_user_input, delete_memory
 
 st.title("LORD")
 

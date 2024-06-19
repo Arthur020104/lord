@@ -9,7 +9,7 @@ import time
 import json
 import os
 from datetime import datetime
-from agents.main import call_current_node, process_user_input
+from lord.main import call_current_node, process_user_input
 
 app = Flask(__name__)
 
