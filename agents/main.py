@@ -12,6 +12,7 @@ from agents.node_obj.amenities_chain import amenities_chain
 from agents.node_obj.apartments_chain import apartments_chain
 from agents.node_obj.indication_chain import indication_chain
 from agents.node_obj.objection_chain import objection_chain
+from agents.node_obj.location_chain import location_chain
 from agents.LLM import generate_llm
 
 # Initialize memory
@@ -44,6 +45,7 @@ all_nodes = {
     "ApartmentsChain": apartments_chain,
     "IndicationChain": indication_chain,
     "ObjectionChain": objection_chain,
+    "LocationChain": location_chain,
 }
 
 # Add children to nodes
@@ -57,6 +59,7 @@ node = start_conversation_chain
 def call_current_node():
     global node, dict_base, last_output
     try:
+        print(f"Current node: {node.get_name()}")
         dict_base['chat_history'] = memory.get_memory_tuple()
         dict_base['property_info'] = node.filter_property_info(empreendimento)
         response = node.call_chain(dict_base)

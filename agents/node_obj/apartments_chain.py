@@ -7,5 +7,5 @@ apartments_chain = Node(
     llm=generate_llm(temp=0,model=4), 
     children={}, 
     name="ApartmentsChain", 
-    property_info_key=['torres', 'andares_por_torre', 'apartamentos']
+    property_info_key=['torres', 'andares_por_torre', 'apartamentos', 'apartamentos_detalhados']
     )
