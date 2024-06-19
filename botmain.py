@@ -49,7 +49,6 @@ def start_new_conversation(driver, contact_number):
     contact_input.send_keys(contact_number) # Sei la se esses sleeps sao necessários, mas vai que a pagina demora carregar.
     time.sleep(1)
     contact_input.send_keys(Keys.ENTER)
-    time.sleep(2)
 
 # Função para ler a última mensagem recebida
 def read_last_message(driver):

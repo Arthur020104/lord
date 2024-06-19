@@ -8,7 +8,7 @@ url = "http://192.168.15.7:5000/start_chat"
 
 # Payload (dados) da requisição - o número de telefone que será enviado
 payload = {
-    "phone_number": "553496724123"
+    "phone_number": "+55 34 9672 4123"
 }
 
 # Cabeçalhos da requisição - especificando que o conteúdo é do tipo JSON
