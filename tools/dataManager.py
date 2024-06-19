@@ -15,7 +15,7 @@ def clear_string(input_string):
     A function that removes diacritics and converts to lowercase.
     """
     return unidecode(input_string).lower()
-
+    
 
 # Prepare the prompt template for the LLM
 prompt_template = """
