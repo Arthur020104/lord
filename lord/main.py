@@ -59,5 +59,5 @@ def process_user_input(user_input):
     return agent.process_user_input(user_input)
 
 def delete_memory():
-    return agent.delete_memory
+    return agent.delete_memory()
 
