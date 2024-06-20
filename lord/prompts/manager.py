@@ -37,7 +37,3 @@ manager_prompt.add_message("system", manager_str)
 
 manager_prompt.set_history_key("chat_history")
 
-# Adicionando as mensagens usando o método add_message
-manager_prompt.add_message("system",manager_str)
-
-manager_prompt.set_history_key("chat_history")

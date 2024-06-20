@@ -15,7 +15,7 @@ from lord.node_obj.objection_chain import objection_chain
 from lord.node_obj.location_chain import location_chain
 from lord.LLM import generate_llm
 from AgentBuild.Agent.Agent import Agent
-from AgentBuild.OutputParser.ManagerJson import manager_parser
+from AgentBuild.OutputParser.ManagerJson import manager_parser, manager_output_parser_str
 # Initialize memory
 memory = CustomConversationTokenBufferMemory(max_token_limit=2000, ia_key="ai", human_key="human", order=1)
 
@@ -29,7 +29,7 @@ dict_base = {
     'nome_da_imobiliaria': 'ginga imoveis',
     'property_info': empreendimento,
 }
-
+manager_prompt.add_message('system', manager_output_parser_str)
 manager = manager_prompt.get_prompt()| generate_llm(temp=0, model=4) | manager_parser
 
 # Create a dictionary for all nodes
