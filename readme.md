@@ -1,7 +1,7 @@
 Estrutura do projeto
 ![Structure](images/nodes.jpg)
 
-# Projeto de Interface de Áudio e Chatbot WhatsApp
+# Lord
 
 Este projeto consiste em duas interfaces principais: uma interface de áudio para interações com um agente conversacional e uma interface de chatbot para o WhatsApp Web. Abaixo estão descritos os principais arquivos do projeto, suas funções e dependências.
 
