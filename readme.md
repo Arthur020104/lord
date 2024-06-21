@@ -1,6 +1,3 @@
-Estrutura do projeto
-![Structure](images/nodes.jpg)
-
 # Lord
 
 Este projeto consiste em duas interfaces principais: uma interface de áudio para interações com um agente conversacional e uma interface de chatbot para o WhatsApp Web. Abaixo estão descritos os principais arquivos do projeto, suas funções e dependências.
@@ -8,6 +5,8 @@ Este projeto consiste em duas interfaces principais: uma interface de áudio par
 ## Arquivos Principais
 
 ### audioInterface.py
+
+![Structure](images/audiointerface.jpg)
 
 Este script permite a comunicação com o agente através de comandos de voz. Ele inclui marcadores de tempo para medir a latência das respostas da LLM (Language Model) e do Elevenlabs.
 
