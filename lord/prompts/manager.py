@@ -28,7 +28,19 @@ Guidelines for Node Selection:
 - If the user is still greeting the agent, return `StartConversationChain`.
 - If it is best to continue with the current node, return `Não existe`.
 
+Conversation flow suggestions:
+The conversation starts at the `StartConversationChain` node.
+- LocationChain is the suggested next node stay in here for n interactions
+- AmenitiesChain is the suggested next node stay in here for n interactions
+- ApartmentsChain is the suggested next node stay in here for n interactions
+- ScheduleVisit is the suggested next node stay in here for n interactions
+This is a guideline to help you, but you are never going to use this exactly as it is.
+Is important to not get out of the current node until the user is satisfied with the information you provided.
+The nodes node mention above should be called in especific situations, like when the user ask for it or when you think is the best time to call it.
+
+
 You have full control over the conversation flow. Aim to maintain an engaging conversation focused on selling the property and call the most appropriate node to achieve this. Ensure to follow the conversation guidelines and references.
+
 
 Nodes are selected based on the user's response and the current conversation context.
 """
