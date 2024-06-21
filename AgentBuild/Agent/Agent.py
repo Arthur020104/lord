@@ -64,4 +64,6 @@ class Agent:
         self.memory.delete_memory() 
         self.node = self.initial_node
         print("Memory deleted and conversation reset to initial node.")
+    def get_current_node(self):
+        return self.node.get_name()
 
