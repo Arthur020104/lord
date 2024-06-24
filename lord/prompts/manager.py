@@ -18,6 +18,7 @@ Available Nodes:
 - StartConversationChain: Handle the initial greeting and introduction. This node should be used when the user is still greeting the agent. Return `StartConversationChain`.
 
 Guidelines for Node Selection:
+- If you are in the ScheduleVisit node, do not exit it until you arrange a schedule, or the user don't want to schedule it no more.
 - If the user indicates they are busy, return `EndOfConversationUserNoTime`.
 - If the user wants to schedule a visit or expresses strong interest in the property, return `ScheduleVisit`.
 - If the user raises objections or concerns, return `ObjectionChain`.
