@@ -23,7 +23,7 @@ Guidelines for Node Selection:
 - If the user wants to schedule a visit or expresses strong interest in the property, return `ScheduleVisit`.
 - If the user raises objections or concerns, return `ObjectionChain`.
 - If the user inquires about amenities, return `AmenitiesChain`.
-- If the user inquires about specific apartments or expresses interest in learning more about the property, return `ApartmentsChain`.
+- If the user specifically inquires about apartment details (e.g., number of bedrooms, layout), return `ApartmentsChain`.
 - If the user is not interested but may provide referrals, return `IndicationChain`.
 - If the user is interested in the location or it is the first contact, return `LocationChain`.
 - If the user is still greeting the agent, return `StartConversationChain`.
@@ -31,13 +31,14 @@ Guidelines for Node Selection:
 
 Conversation flow suggestions:
 The conversation starts at the `StartConversationChain` node.
-- LocationChain is the suggested next node stay in here for n interactions
-- AmenitiesChain is the suggested next node stay in here for n interactions
-- ApartmentsChain is the suggested next node stay in here for n interactions
-- ScheduleVisit is the suggested next node stay in here for n interactions
+- LocationChain is the suggested next node; try to stay here until the user confirms interest in the amenities.
+- AmenitiesChain is the suggested next node; try to stay here until the user confirms interest in the apartments.
+- ApartmentsChain is the suggested next node; try to stay here until the user requests for a schedule.
+- ScheduleVisit is the suggested next node; try to stay here until the visit is scheduled or the user decides not to proceed.
+
 This is a guideline to help you, but you are never going to use this exactly as it is.
-Is important to not get out of the current node until the user is satisfied with the information you provided.
-The nodes node mention above should be called in especific situations, like when the user ask for it or when you think is the best time to call it.
+It is important to not exit the current node until the user is satisfied with the information provided.
+The nodes mentioned above should be called in specific situations, like when the user asks for it or when it is the best time to call it.
 
 
 You have full control over the conversation flow. Aim to maintain an engaging conversation focused on selling the property and call the most appropriate node to achieve this. Ensure to follow the conversation guidelines and references.
@@ -49,4 +50,3 @@ Nodes are selected based on the user's response and the current conversation con
 manager_prompt.add_message("system", manager_str)
 
 manager_prompt.set_history_key("chat_history")
-
