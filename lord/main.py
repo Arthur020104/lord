@@ -16,6 +16,7 @@ from lord.node_obj.location_chain import location_chain
 from lord.LLM import generate_llm
 from AgentBuild.Agent.Agent import Agent
 from AgentBuild.OutputParser.ManagerJson import manager_parser, manager_output_parser_str
+
 # Initialize memory
 memory = CustomConversationTokenBufferMemory(max_token_limit=2000, ia_key="ai", human_key="human", order=1)
 
@@ -55,6 +56,7 @@ agent = Agent(initial_node=start_conversation_chain,
 
 def call_current_node():
     return agent.call_current_node()
+
 def process_user_input(user_input):
     return agent.process_user_input(user_input)
 
