@@ -49,4 +49,8 @@ Nodes are selected based on the user's response and the current conversation con
 
 manager_prompt.add_message("system", manager_str)
 
+<<<<<<< HEAD
 manager_prompt.set_history_key("chat_history")
+=======
+manager_prompt.set_history_key("chat_history")
+>>>>>>> 2cd4f67483179cc4f634f15d98b2def5dcf1c203
