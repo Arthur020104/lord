@@ -10,9 +10,19 @@ empreendimento = {
         "Referencias": {
             "Referencias primarias": {
                 1: "O Vivaz Santa Monica fica na antiga 19 entre a Segismundo e Ana Godoy.",
+                2: "Fica no centro do bairro a 5 quadras das agencias do Itau e Bradesco e 2 quadras do posto Ipiranga."
             },
             "Referencias secundarias": {
-                1: "Fica no centro do bairro a 5 quadras das agencias do Itau e Bradesco e 2 quadras do posto Ipiranga."
+                1: "Supermercado Carrefour: Apenas 5 minutos de carro, oferecendo fácil acesso às compras diárias.",
+                2: "Centro Educacional SESC: Apenas 7 minutos de distância, uma excelente opção para educação e atividades culturais.",
+                3: "Parque do Sabiá: A 10 minutos de carro, ideal para atividades ao ar livre como caminhadas, corridas e desfrutar de um ambiente verde.",
+                4: "Universidade Federal de Uberlândia (UFU): Localizada a 12 minutos, facilitando o acesso à educação superior de qualidade.",
+                5: "Shopping Uberlândia: A 8 minutos de carro, oferecendo uma ampla variedade de lojas, restaurantes, cinema e opções de entretenimento.",
+                6: "Hospital Santa Genoveva: A apenas 6 minutos, garantindo assistência médica rápida e eficiente em caso de necessidade.",
+                7: "Escola Estadual Segismundo Pereira: A 5 minutos a pé, oferecendo opções de ensino fundamental e médio bem próximas ao empreendimento.",
+                8: "Academia Smart Fit: Apenas 7 minutos de distância para quem busca manter uma rotina de exercícios físicos.",
+                9: "Centro Administrativo Municipal: A 10 minutos, facilitando o acesso a serviços públicos e administrativos.",
+                10: "Padaria Mix Pão: A 3 minutos a pé, ideal para compras rápidas de pães e outros itens de padaria."
             }
         }
 
@@ -164,6 +174,56 @@ empreendimento = {
         } 
 } 
 ,
+"resumo_preco": {
+    "detalhes": [
+        {
+            "tipo": "Apartamento Final 01",
+            "metragem": 90.73,
+            "quartos": 3,
+            "suites": 1,
+            "vagas_garagem": 2,
+            "entrada": "68 mil Reais",
+            "parcelado": "137 mil Reais parcelados até a entrega das chaves"
+        },
+        {
+            "tipo": "Apartamento Final 02",
+            "metragem": 90.88,
+            "quartos": 3,
+            "suites": 1,
+            "vagas_garagem": 2,
+            "entrada": "68 mil Reais",
+            "parcelado": "136 mil Reais parcelados até a entrega das chaves"
+        },
+        {
+            "tipo": "Apartamento Final 03",
+            "metragem": 90.73,
+            "quartos": 3,
+            "suites": 1,
+            "vagas_garagem": 2,
+            "entrada": "68 mil Reais",
+            "parcelado": "137 mil Reais parcelados até a entrega das chaves"
+        },
+        {
+            "tipo": "Apartamento Final 04",
+            "metragem": 79.55,
+            "quartos": 2,
+            "suites": 2,
+            "vagas_garagem": 2,
+            "entrada": "62 mil Reais",
+            "parcelado": "123 mil Reais parcelados até a entrega das chaves"
+        },
+        {
+            "tipo": "Apartamento Final 05",
+            "metragem": 79.55,
+            "quartos": 2,
+            "suites": 2,
+            "vagas_garagem": 2,
+            "entrada": "62 mil Reais",
+            "parcelado": "123 mil Reais parcelados até a entrega das chaves"
+        }
+    ],
+    "resumo": "Os preços dos apartamentos no Vivaz Santa Mônica variam de acordo com a metragem e o número de quartos. Para os apartamentos de 3 quartos, com metragem de 90.73 m² a 90.88 m², o valor de entrada é de 68 mil Reais, com parcelas de 136 a 137 mil Reais até a entrega das chaves. Já para os apartamentos de 2 quartos, com metragem de 79.55 m², a entrada é de 62 mil Reais, com parcelas de 123 mil Reais até a entrega das chaves. Os valores podem ser adaptados conforme o fluxo financeiro do comprador, facilitando a aquisição do imóvel."
+},
     "Resumo_en": """Vivaz Santa Mônica by COBO Empreendimentos offers a modern residential experience in Santa Monica.
     The project features one 15-story tower with 55 apartments, ready by April 2027.
     There are 2 and 3-bedroom units, all equipped with gourmet verandas, air-conditioning prep, and electric car infrastructure.
