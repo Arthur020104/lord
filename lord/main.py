@@ -13,6 +13,7 @@ from lord.node_obj.apartments_chain import apartments_chain
 from lord.node_obj.indication_chain import indication_chain
 from lord.node_obj.objection_chain import objection_chain
 from lord.node_obj.location_chain import location_chain
+from lord.node_obj.pricing import pricing_chain
 from lord.LLM import generate_llm
 from AgentBuild.Agent.Agent import Agent
 from AgentBuild.OutputParser.ManagerJson import manager_parser, manager_output_parser_str
@@ -36,6 +37,8 @@ dict_base = {
     Always write the unit of measurement in full. For example, write "metros quadrados" instead of "m²".
     Always write in correct PT-BR with proper punctuation and grammar.
     Never use abbreviations; use only complete words.
+    Always kepp the conversation natural and friendly.
+    Dont write more than 35 words in a single message.
     """
 }
 
@@ -54,6 +57,7 @@ all_nodes = {
     'IndicationChain': indication_chain,
     'ObjectionChain': objection_chain,
     'LocationChain': location_chain,
+    'PricingChain': pricing_chain
 }
 
 # Initializando o agente
