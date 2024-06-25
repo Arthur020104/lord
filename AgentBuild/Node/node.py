@@ -27,10 +27,10 @@ class Node():
             inicial_answer = self.chain.invoke(dict_input)
         
         if self.verbose_prices:
-            print(f"\n\nTotal Tokens: {cb.total_tokens}\n")
+            print(f"\nUso do no {self.get_name()}\nTotal Tokens: {cb.total_tokens}")
             print(f"Prompt Tokens: {cb.prompt_tokens}")
             print(f"Completion Tokens: {cb.completion_tokens}")
-            print(f"Total Cost (USD): ${cb.total_cost}")
+            print(f"Total Cost (USD): ${cb.total_cost}\n")
         #if improvement_cycle:
         #    for _ in range(cycle):
           #      inicial_answer = self.improvement_cycle(self.llm, inicial_answer, dict_input['chat_history'],dict_input)

@@ -53,10 +53,10 @@ class Agent:
                             'current_node': self.node.get_name()
                         })
                     if self.verbose_prices:
-                        print(f"\n\nTotal Tokens: {cb.total_tokens}\n")
+                        print(f"\nUso do manager\nTotal Tokens: {cb.total_tokens}")
                         print(f"Prompt Tokens: {cb.prompt_tokens}")
                         print(f"Completion Tokens: {cb.completion_tokens}")
-                        print(f"Total Cost (USD): ${cb.total_cost}")
+                        print(f"Total Cost (USD): ${cb.total_cost}\n")
                     data_dict = node_called
                     node_called = data_dict['node'] # proximo nó chamado
                     print(f"Node called: {node_called}, why called: {data_dict['answer']}") # Por que chamou o proximo nó
