@@ -16,7 +16,7 @@ Available Nodes:
 - ApartmentsChain: Provide detailed information about the available apartments. Tailor the offer to the client's needs to spark their interest in viewing the property. This is the best node to discuss specifics about the property. Return `ApartmentsChain`.
 - IndicationChain: Handle interactions with potential clients who decide not to schedule a visit or are not interested in purchasing a property. Gently seek referrals of friends or relatives who might be interested. Follow these guidelines if the client decides not to proceed. Return `IndicationChain`.
 - StartConversationChain: Handle the initial greeting and introduction. This node should be used when the user is still greeting the agent. Return `StartConversationChain`.
-
+- PricingChain: Provide information about the property's price and payment terms and should be called the explain the pricing details and user asks for it. Return `PricingChain`.
 Guidelines for Node Selection:
 - If you are in the ScheduleVisit node, do not exit it until you arrange a schedule, or the user don't want to schedule it no more.
 - If the user indicates they are busy, return `EndOfConversationUserNoTime`.
@@ -27,6 +27,7 @@ Guidelines for Node Selection:
 - If the user is not interested but may provide referrals, return `IndicationChain`.
 - If the user is interested in the location or it is the first contact, return `LocationChain`.
 - If the user is still greeting the agent, return `StartConversationChain`.
+- If the user asks about the property's price and payment terms, should be called before the ScheduleVisit node. Return `PricingChain`.
 - If it is best to continue with the current node, return `Não existe`.
 
 Conversation flow suggestions:
