@@ -77,15 +77,28 @@ class FakeResponse:
             None
         """
         try:
+            # Verifica se existe uma correspondência exata
+            match = self.df[(self.df['user_input'] == user_input) & 
+                            (self.df['response'] == response) & 
+                            (self.df['current_node'] == current_node)]
+            
+            if not match.empty:
+                print('Entrada já existe no CSV. Não será adicionada novamente.')
+                return
+            
+            # Cria uma nova entrada
             new_entry = {
                 'user_input': user_input,
                 'response': response,
                 'current_node': current_node,
                 'checked': checked
             }
+            
+            # Adiciona a nova entrada ao DataFrame
             self.df = pd.concat([self.df, pd.DataFrame(new_entry, index=[0])], ignore_index=True)
             self.df.to_csv(self.csv_reference, index=False)
             print('Adicionando nova resposta ao CSV.')
+        
         except Exception as e:
             print(f'An error occurred while adding the response: {e}')
     def get_csv(self):
