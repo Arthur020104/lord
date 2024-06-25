@@ -56,4 +56,3 @@ amenities_prompt.add_message('system', prompt_str)
 amenities_prompt.set_history_key("chat_history")
 # Obtendo o prompt final
 amenities_prompt = amenities_prompt.get_prompt()
-

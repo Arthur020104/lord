@@ -4,11 +4,11 @@ import json
 
 # Nesse Script colocamos o telefone que será utilizado no lordChat
 # URL do endpoint no servidor Flask
-url = "http://192.168.15.7:5000/start_chat"
+url = "http://192.168.100.154:5000/start_chat"
 
 # Payload (dados) da requisição - o número de telefone que será enviado
 payload = {
-    "phone_number": "+55 34 9672 4123"
+    "phone_number": "34 9263 1397"
 }
 
 # Cabeçalhos da requisição - especificando que o conteúdo é do tipo JSON
