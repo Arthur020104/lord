@@ -35,7 +35,7 @@ class FakeResponse:
             print(f'An unexpected error occurred: {e}')
             raise
 
-    def get_response(self, user_input, current_node):
+    def get_response(self, user_input, current_node, score_threshold=0.9):
         """
         Obtém uma resposta que corresponde à entrada do usuário, ao nó atual e ao status verificado,
         usando correspondência fuzzy.
@@ -58,7 +58,7 @@ class FakeResponse:
             matches = process.extract(user_input, possible_responses['user_input'], scorer=fuzz.ratio)
             
             # Filtra matches com score menor que 90
-            matches = [match for match in matches if match[1] >= 90]
+            matches = [match for match in matches if match[1] >= score_threshold*100 ]
             
             if not matches:
                 return None
