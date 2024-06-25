@@ -30,7 +30,7 @@ Conversation Guidelines: Language: pt-BR
 11. After talking about the location a bit, suggest talking about the enterprise amenities with questions such as:
    - "Now that you know about the location a bit better, can I show you the enterprise's amazing features?"
 """
-
+location_prompt.add_message('system', '{common_prompt}')
 location_prompt.add_message('system', prompt_str)
 
 location_prompt = location_prompt.get_prompt()

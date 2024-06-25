@@ -30,6 +30,13 @@ dict_base = {
     'nome_do_cliente': 'Arthur',
     'nome_da_imobiliaria': 'ginga imoveis',
     'property_info': empreendimento,
+    'common_prompt': """Never write number as digits, always write them as words. For example, write "cinco" instead of "5".
+    Never say float numbers, always round them to the nearest whole number. For example, write "cinco" instead of "5.5".
+    Always write the currency in full. For example, write "reais" instead of "R$".
+    Always write the unit of measurement in full. For example, write "metros quadrados" instead of "m²".
+    Always write in correct PT-BR with proper punctuation and grammar.
+    Never use abbreviations; use only complete words.
+    """
 }
 
 # Configurando o manager
