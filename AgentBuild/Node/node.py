@@ -1,15 +1,16 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder  # Importa o template de prompts do LangChain
 from langchain.schema.output_parser import StrOutputParser  # Importa o parser de saída que converte para string
+from langchain_community.callbacks import get_openai_callback
 import copy
 class Node():
-    def __init__(self, llm, children: dict[str, 'Node'], prompt: ChatPromptTemplate, name: str, property_info_key: list[str] = []):
+    def __init__(self, llm, children: dict[str, 'Node'], prompt: ChatPromptTemplate, name: str, property_info_key: list[str] = [], verbose_prices=False):
         self.llm = llm  # Modelo de linguagem usado pelo nó
         self.name = name  # Nome do nó
         self.children = children  # Filhos do nó (outros nós)
         self.prompt = prompt  # Template do prompt usado para interações
         self.chain = self.prompt | self.llm | StrOutputParser()  # Cadeia de processamento do nó: prompt -> modelo de linguagem -> parser de string
         self.property_info_key = property_info_key  # Chaves específicas para filtrar informações de propriedades
-
+        self.verbose_prices = verbose_prices  # Se os preços devem ser mostrados ou não
     def add_child(self, key, value): # Nao utilizamos essas duas, for now
         # Adiciona um nó filho ao nó atual
         self.children[key] = value
@@ -17,13 +18,22 @@ class Node():
     def get_children(self):
         # Retorna os filhos do nó atual
         return self.children
-
+    def toggle_verbose_prices(self):
+        # Alterna a exibição dos preços
+        self.verbose_prices = not self.verbose_prices
     def call_chain(self, dict_input: dict,cycle=2, improvement_cycle=False):
         # Chama a cadeia de processamento com o dicionário de entrada e retorna o resultado como texto
-        inicial_answer = self.chain.invoke(dict_input)
-        if improvement_cycle:
-            for _ in range(cycle):
-                inicial_answer = self.improvement_cycle(self.llm, inicial_answer, dict_input['chat_history'],dict_input)
+        with get_openai_callback() as cb:
+            inicial_answer = self.chain.invoke(dict_input)
+        
+        if self.verbose_prices:
+            print(f"\nUso do no {self.get_name()}\nTotal Tokens: {cb.total_tokens}")
+            print(f"Prompt Tokens: {cb.prompt_tokens}")
+            print(f"Completion Tokens: {cb.completion_tokens}")
+            print(f"Total Cost (USD): ${cb.total_cost}\n")
+        #if improvement_cycle:
+        #    for _ in range(cycle):
+          #      inicial_answer = self.improvement_cycle(self.llm, inicial_answer, dict_input['chat_history'],dict_input)
         return {'text': inicial_answer}
 
     def get_name(self):

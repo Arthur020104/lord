@@ -1,9 +1,10 @@
 from AgentBuild.Node.node import Node
 from AgentBuild.Memory.CustomBuffer import CustomConversationTokenBufferMemory
 from langchain_core.runnables.base import RunnableSequence
+from langchain_community.callbacks import get_openai_callback
 import json
 class Agent:
-    def __init__(self,initial_node:Node, all_nodes:dict, memory:CustomConversationTokenBufferMemory,agent_info:dict, manager:RunnableSequence, nodes_info:dict):
+    def __init__(self,initial_node:Node, all_nodes:dict, memory:CustomConversationTokenBufferMemory,agent_info:dict, manager:RunnableSequence, nodes_info:dict, verbose_prices = False):
         self.node = initial_node # Ponto de partida / No inicial
         self.initial_node = initial_node  # ??? Acho que isso é redundante
         self.all_nodes = all_nodes # Todos os nós que o agente pode suar
@@ -12,6 +13,7 @@ class Agent:
         self.manager = manager # Manager, ou router que vai gerir e guiar os nós.
         self.last_output = "" # Ultima resposta 
         self.nodes_info = nodes_info # Informação especifica de cada nó
+        self.verbose_prices = verbose_prices # Se vai mostrar os preços ou não
         # Fazendo todo mundo se ligar
         for node_name, cnode in self.all_nodes.items():
             for child_name, child_node in all_nodes.items():
@@ -20,6 +22,8 @@ class Agent:
 
     def call_current_node(self):
         try:
+            if self.verbose_prices and not self.node.verbose_prices:
+                self.node.toggle_verbose_prices()
             print(f"Current node: {self.node.get_name()}") # Mostra o nó atual
             self.nodes_info['chat_history'] = self.memory.get_memory_tuple() # Atualiza historico
             self.nodes_info['property_info'] = self.node.filter_property_info(self.agent_info) # Filtra as informações do property_info
@@ -42,11 +46,17 @@ class Agent:
             for _ in range(3): # Tenta no máximo 3 vezes, nao sei pq isso ta aqui mas tá
                 try:
                     # tenta chamar o próximo nó que o manager decidir
-                    node_called = self.manager.invoke({
-                        'chat_history': self.memory.get_memory_tuple(),
-                        'nodes': list(self.node.get_children().keys()),
-                        'current_node': self.node.get_name()
-                    })
+                    with get_openai_callback() as cb:
+                        node_called = self.manager.invoke({
+                            'chat_history': self.memory.get_memory_tuple(),
+                            'nodes': list(self.node.get_children().keys()),
+                            'current_node': self.node.get_name()
+                        })
+                    if self.verbose_prices:
+                        print(f"\nUso do manager\nTotal Tokens: {cb.total_tokens}")
+                        print(f"Prompt Tokens: {cb.prompt_tokens}")
+                        print(f"Completion Tokens: {cb.completion_tokens}")
+                        print(f"Total Cost (USD): ${cb.total_cost}\n")
                     data_dict = node_called
                     node_called = data_dict['node'] # proximo nó chamado
                     print(f"Node called: {node_called}, why called: {data_dict['answer']}") # Por que chamou o proximo nó

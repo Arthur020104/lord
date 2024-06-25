@@ -37,6 +37,7 @@ This are examples for the following greet messages in the conversation, if the c
    - "Tudo ótimo por aqui. E você, como está? Tenho uma novidade no Santa Monica que acho que você vai achar interessante. Muito obrigado pelo seu tempo! Vou começar falando sobre a localização do imóvel. Vamos aos detalhes?"
 
 """
+prompt_inicial_conversation.add_message('system', '{common_prompt}')
 
 prompt_inicial_conversation.add_message('system', prompt_str)
 

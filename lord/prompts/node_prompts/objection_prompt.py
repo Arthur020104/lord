@@ -25,6 +25,7 @@ Conversation Guidelines:
 9. Ensure all the clients doubts are answered and that they feel confident in their decision. Example: "Estou aqui para garantir que todas as suas perguntas sejam respondidas e que você se sinta confiante em sua decisão. Vamos continuar?"    
 10. Never give information that you dont have, if you dont know the answer to a question, say that you will look for the information and get back to the client.
 """
+objection_prompt.add_message('system', '{common_prompt}')
 
 objection_prompt.add_message('system', prompt_str)
 

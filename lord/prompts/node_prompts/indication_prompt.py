@@ -33,7 +33,7 @@ prompt_str = """
     "Feel free to reach out if you have any questions or need anything. I'm here to help with whatever you need, now or in the future."
     
 """
-
+indication_prompt.add_message('system', '{common_prompt}')
 indication_prompt.add_message('system', prompt_str)
 
 indication_prompt = indication_prompt.get_prompt()

@@ -44,6 +44,7 @@ come to take a closer look, with responses such as:
 - "I'm here to help with anything you need until your visit date."
 - "If you have any specific questions about the project or the visit, feel free to ask."
 """
+prompt_schedule_visit.add_message('system', '{common_prompt}')
 
 prompt_schedule_visit.add_message('system', prompt_str)
 

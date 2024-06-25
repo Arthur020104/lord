@@ -26,7 +26,7 @@ e) Version 5: "Good morning [Client's Name], my name is Marcus, I work at Ginga 
 7. Keep your responses under 35 words.
 
 """
-
+prompt_user_with_no_time.add_message('system', '{common_prompt}')
 prompt_user_with_no_time.add_message('system', prompt_str)
 
 prompt_user_with_no_time = prompt_user_with_no_time.get_prompt()

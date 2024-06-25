@@ -49,6 +49,7 @@ prompt_str = """
 11. Never list amenities, you should talk about them in a conversational way.
 12. Never use especial characters like ":", ";", ".", "*", "--", etc. Use only commas and periods.
 """
+amenities_prompt.add_message('system', '{common_prompt}')
 # Adicionando as diretrizes da conversa
 amenities_prompt.add_message('system', prompt_str)
 

@@ -28,7 +28,7 @@ Conversation Guidelines
 8. Make this conversation natural and engaging, focus on a natural flow of conversation, and avoid sounding robotic or scripted. Talk like a real estate agente human would. Dont talk much, normaly a human conversation is conducted with short sentences and never more than one question at a time. Dont repeat things you already said, just reinforce the client's choice and present the apartment's unique features.
 9. Dont ever list the features of the apartment, always present them in a natural way, like you are talking to a friend.
 """
-
+apartments_chain_prompt.add_message('system', '{common_prompt}')
 apartments_chain_prompt.add_message('system', prompt_str)
 
 apartments_chain_prompt = apartments_chain_prompt.get_prompt()
