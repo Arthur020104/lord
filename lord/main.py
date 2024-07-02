@@ -34,12 +34,16 @@ dict_base = {
     'common_prompt': """Never write number as digits, always write them as words. For example, write "cinco" instead of "5".
     Never say float numbers, always round them to the nearest whole number. For example, write "cinco" instead of "5.5".
     Always write the currency in full. For example, write "reais" instead of "R$".
+    Make sure the current message connects with the previous ones naturally.
     Always write the unit of measurement in full. For example, write "metros quadrados" instead of "m²".
     Always write in correct PT-BR with proper punctuation and grammar.
     Never use abbreviations; use only complete words.
     Always kepp the conversation natural and friendly.
     Dont write more than 35 words in a single message.
-    """
+    Never repeat yourself.
+    Pay attention to your previous messages to not repeat yourself. Never repeat yourself.
+    """,
+    'manager_thought': ''
 }
 
 # Configurando o manager
@@ -67,7 +71,8 @@ agent = Agent(
     memory=memory,
     agent_info=empreendimento,
     manager=manager,
-    nodes_info=dict_base
+    nodes_info=dict_base,
+    verbose_prices=True
 )
 
 # Adicionando FakeResponse
