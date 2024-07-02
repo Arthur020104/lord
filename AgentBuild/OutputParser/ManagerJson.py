@@ -3,6 +3,7 @@ from langchain_core.output_parsers import JsonOutputParser
 class Manager(BaseModel):
     answer: str = Field(description="Explain why you chose that node based on the chat history")
     node: str = Field(description="Name of the node to be called next")
+    thought: str = Field(description="This is a suggestion of how to approach the next question to keep the conversation flow natural, this suggestion must be generic")
 
 manager_parser = JsonOutputParser(pydantic_object=Manager)
 
