@@ -30,9 +30,11 @@ Guidelines for Node Selection:
 - If the user asks about the property's price and payment terms, should be called before the ScheduleVisit node. Return `PricingChain`.
 - If it is best to continue with the current node, return `Não existe`.
 
+Make sure the node do not repeat itself, if the same node return the same response more than once switch to another node.
+
 Conversation flow suggestions:
-The conversation starts at the `StartConversationChain` node.
-- LocationChain is the suggested next node; try to stay here until the user confirms interest in the amenities.
+The conversation starts at the `StartConversationChain` node. Call 'EndOfConversationUserNoTime' if the user indicates they is busy. If user dont want to continue the conversation call 'IndicationChain'.
+- LocationChain is the suggested next node; 
 - AmenitiesChain is the suggested next node; try to stay here until the user confirms interest in the apartments.
 - ApartmentsChain is the suggested next node; try to stay here until the user requests for a schedule.
 - ScheduleVisit is the suggested next node; try to stay here until the visit is scheduled or the user decides not to proceed.
@@ -46,6 +48,8 @@ You have full control over the conversation flow. Aim to maintain an engaging co
 
 
 Nodes are selected based on the user's response and the current conversation context.
+The thought for the next node must be a generic instruction of what to say to keep the conversation flow natural.
+The thought ask must be like "You should metion the username to keep the conversation going" or "Keep talking about the social amenities the user showed insterested in".
 """
 
 manager_prompt.add_message("system", manager_str)
