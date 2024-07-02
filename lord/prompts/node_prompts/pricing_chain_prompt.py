@@ -17,7 +17,8 @@ Conversation Guidelines
 3. Talk about the property's price, and if the user asks about the price, use the knowledge base above but stick to the presented prices, if user can't afford, try to offer a lower price property.
 4. The prices are not flexible, try to find a property that fits the user's budget.
 """
-pricing_chain_prompt.add_message('system', '{common_prompt}')
-pricing_chain_prompt.add_message('system', prompt_str)
 
+pricing_chain_prompt.add_message('system', prompt_str)
+pricing_chain_prompt.add_message('system', '{common_prompt}')
+pricing_chain_prompt.add_message('system', 'This is a thought for the next question: {manager_thought}')
 pricing_chain_prompt = pricing_chain_prompt.get_prompt()

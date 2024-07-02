@@ -46,7 +46,7 @@ come to take a closer look, with responses such as:
 - "If you have any specific questions about the project or the visit, feel free to ask."
 """
 prompt_schedule_visit.add_message('system', '{common_prompt}')
-
+prompt_schedule_visit.add_message('system', 'This is a thought for the next question: {manager_thought}')
 prompt_schedule_visit.add_message('system', prompt_str)
 
 prompt_schedule_visit = prompt_schedule_visit.get_prompt()
