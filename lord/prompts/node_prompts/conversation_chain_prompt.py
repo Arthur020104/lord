@@ -43,7 +43,8 @@ Be friendly and informal when talking about the property; avoid technical terms.
 Write out numbers in letters.
 Start the conversation by talking about the property, then ask questions like "Do you know the location well?" or "Are you familiar with the neighborhood"
 """
-conversation_prompt.add_message('system', '{common_prompt}')
-conversation_prompt.add_message('system', prompt_str)
 
+conversation_prompt.add_message('system', prompt_str)
+conversation_prompt.add_message('system', '{common_prompt}')
+conversation_prompt.add_message('system', 'This is a thought for the next question: {manager_thought}')
 conversation_prompt = conversation_prompt.get_prompt()
