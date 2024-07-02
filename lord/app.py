@@ -1,14 +1,12 @@
 import sys
 import os
+sys.path.append("../")
+sys.path.append("./")
 import uuid
 from flask import Flask, request, jsonify
 from functools import wraps
 from collections import defaultdict
 from langchain.schema.output_parser import StrOutputParser
-
-# Adicionando o caminho do projeto
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-
 # Importações dos módulos do projeto
 from AgentBuild.Memory.CustomBuffer import CustomConversationTokenBufferMemory
 from AgentBuild.Agent.Agent import Agent
