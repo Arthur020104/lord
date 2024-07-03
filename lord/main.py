@@ -35,6 +35,7 @@ dict_base = {
     Never say float numbers, always round them to the nearest whole number. For example, write "cinco" instead of "5.5".
     Always write the currency in full. For example, write "reais" instead of "R$".
     Make sure the current message connects with the previous ones naturally.
+    Never write more than one paragraph in a single message.
     Always write the unit of measurement in full. For example, write "metros quadrados" instead of "m²".
     Always write in correct PT-BR with proper punctuation and grammar.
     Never use abbreviations; use only complete words.
