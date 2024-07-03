@@ -31,9 +31,10 @@ Guidelines for Node Selection:
 - If it is best to continue with the current node, return `Não existe`.
 
 Make sure the node do not repeat itself, if the same node return the same response more than once switch to another node.
-
+Make sure to be on StartConversationChain for 2 interactions.
 Conversation flow suggestions:
-The conversation starts at the `StartConversationChain` node, continue in the StartConversationChain until both users greet each other, if user say bom dia, boa tarde, boa noite, etc, you should still be in the StartConversationChain node. . Call 'EndOfConversationUserNoTime' if the user indicates they is busy. If user dont want to continue the conversation call 'IndicationChain'.
+The conversation starts at the `StartConversationChain` node. Call 'EndOfConversationUserNoTime' if the user indicates they is busy. If user dont want to continue the conversation call 'IndicationChain'.
+- StartConversationChain is the suggested next node; try to stay here until the user shows interest in the property.
 - LocationChain is the suggested next node; 
 - AmenitiesChain is the suggested next node; try to stay here until the user confirms interest in the apartments.
 - ApartmentsChain is the suggested next node; try to stay here until the user requests for a schedule.
