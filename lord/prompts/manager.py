@@ -37,7 +37,8 @@ The conversation starts at the `StartConversationChain` node. Call 'EndOfConvers
 - StartConversationChain is the suggested next node; try to stay here until the user shows interest in the property.
 - LocationChain is the suggested next node; 
 - AmenitiesChain is the suggested next node; try to stay here until the user confirms interest in the apartments.
-- ApartmentsChain is the suggested next node; try to stay here until the user requests for a schedule.
+- ApartmentsChain is the suggested next node;
+- PricingChain is the suggested next node; 
 - ScheduleVisit is the suggested next node; try to stay here until the visit is scheduled or the user decides not to proceed.
 
 This is a guideline to help you, but you are never going to use this exactly as it is.
