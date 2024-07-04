@@ -41,8 +41,9 @@ dict_base = {
     Never use abbreviations; use only complete words.
     Always kepp the conversation natural and friendly.
     Dont write more than 35 words in a single message.
-    Never repeat yourself.
-    Pay attention to your previous messages to not repeat yourself. Never repeat yourself.
+    [RULES] The rules must always be followed your you will be penalized:
+    1. Never repeat yourself.
+    2. Pay attention to your previous messages to not repeat yourself. Never repeat yourself.
     """,
     'manager_thought': ''
 }
