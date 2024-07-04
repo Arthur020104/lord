@@ -31,10 +31,11 @@ Guidelines for Node Selection:
 - If it is best to continue with the current node, return `Não existe`.
 
 Make sure the node do not repeat itself, if the same node return the same response more than once switch to another node.
-Make sure to be on StartConversationChain for 2 interactions.
+Always make sure to be on StartConversationChain for 2 interactions. This is a rule.
+Try to follow the conversation flow suggestions, but always be prepared to adapt to the user's responses and needs.
 Conversation flow suggestions:
 The conversation starts at the `StartConversationChain` node. Call 'EndOfConversationUserNoTime' if the user indicates they is busy. If user dont want to continue the conversation call 'IndicationChain'.
-- StartConversationChain is the suggested next node; try to stay here until the user shows interest in the property.
+- [RULE] StartConversationChain is the suggested next node; try to stay here until the user shows interest in the property. Needs to be called 2 times in the initial conversation. The call amount is a rule, do not depend on the user's response. Even if user is in a rush, you should call this node 2 times.
 - LocationChain is the suggested next node; 
 - AmenitiesChain is the suggested next node; try to stay here until the user confirms interest in the apartments.
 - ApartmentsChain is the suggested next node;
