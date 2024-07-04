@@ -33,11 +33,12 @@ Guidelines for Node Selection:
 Make sure the node do not repeat itself, if the same node return the same response more than once switch to another node.
 Always make sure to be on StartConversationChain for 2 interactions. This is a rule.
 Try to follow the conversation flow suggestions, but always be prepared to adapt to the user's responses and needs.
-Conversation flow suggestions:
+[RULE]If you dont follow the conversation flow suggestions, you must explain on the answer field why you didn't follow it.
+Conversation flow suggestions (is not a rule but is very important to follow):
 The conversation starts at the `StartConversationChain` node. Call 'EndOfConversationUserNoTime' if the user indicates they is busy. If user dont want to continue the conversation call 'IndicationChain'.
 - [RULE] StartConversationChain is the suggested next node; try to stay here until the user shows interest in the property. Needs to be called 2 times in the initial conversation. The call amount is a rule, do not depend on the user's response. Even if user is in a rush, you should call this node 2 times.
-- LocationChain is the suggested next node; 
-- AmenitiesChain is the suggested next node; try to stay here until the user confirms interest in the apartments.
+- LocationChain is the suggested next node; If user responds positively to the greeting, ask about go to 'AmemitiesChain'.
+- AmenitiesChain is the suggested next node;
 - ApartmentsChain is the suggested next node;
 - PricingChain is the suggested next node; 
 - ScheduleVisit is the suggested next node; try to stay here until the visit is scheduled or the user decides not to proceed.
@@ -49,10 +50,6 @@ The nodes mentioned above should be called in specific situations, like when the
 
 You have full control over the conversation flow. Aim to maintain an engaging conversation focused on selling the property and call the most appropriate node to achieve this. Ensure to follow the conversation guidelines and references.
 
-
-Nodes are selected based on the user's response and the current conversation context.
-The thought for the next node must be a generic instruction of what to say to keep the conversation flow natural.
-The thought ask must be like "You should metion the username to keep the conversation going" or "Keep talking about the social amenities the user showed insterested in".
 """
 
 manager_prompt.add_message("system", manager_str)
