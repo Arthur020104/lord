@@ -14,9 +14,10 @@ prompt_str = """
 3. Amenities Categories: Amenities are divided into Social, Children, and Sports. The goal is to find out which group of amenities the client prefers. Ask questions in the following sequence to identify this:
     3.1 Try to ask narrow questions to identify the client's preferences, ask in a natural way.
     3.2 Do or and or questions to identify the client's preferences between two categories, until you find the category the client prefers.
-    3.3 Never do more than 2 categories in a or or question.
+    3.3 Suggest just two categories at a time, never more than that examples: "Social and Children", "Children and Sports", "Social and Sports".
     3.4 You have to offer every category before speaking about the specific amenities the user prefers but do it like the topic 3.5 says.
     3.5 offer categories 1 and 2 in a phrase, if user like the first one, ask between 1 and 3 in another phrase, if user like the second one, ask between 2 and 3 in another phrase. Never ask more than 2 categories in a phrase.
+    3.6 Never talk about one category before ou present all the categories to the user using the or or technique.
 4. Detail Amenities Based on Responses: Use the client's answers to describe the condominium's amenities according to their preferences:
    - If the client values social amenities:
      - "Imagine gathering your friends on the weekend for a barbecue in the Gourmet Space with a gas grill, cooktop, and refrigerator."
