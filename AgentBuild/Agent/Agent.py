@@ -59,8 +59,6 @@ class Agent:
                         print(f"Total Cost (USD): ${cb.total_cost}\n")
                     data_dict = node_called
                     node_called = data_dict['node'] # proximo nó chamado
-                    self.agent_info['manager_thought'] = data_dict['thought']
-                    print(f"Manager thought: {data_dict['thought']}") # Pensamento do manager (por que chamou o proximo nó
                     print(f"Node called: {node_called}, why called: {data_dict['answer']}") # Por que chamou o proximo nó
                     if node_called != "Não existe": # Se achou nó valido
                         self.node = self.node.get_children()[node_called] # muda para o nó válido
